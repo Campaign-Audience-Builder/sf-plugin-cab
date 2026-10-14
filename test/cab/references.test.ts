@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { targetClassName } from '../../src/cab/checks.js';
 import { matchLibrary } from '../../src/cab/library.js';
 import type { FileTemplateReference } from '../../src/cab/model.js';
 import { Answers, LibraryItem, Plan, writesTemplateReference } from '../../src/cab/plan.js';
@@ -81,5 +82,13 @@ describe('template links', () => {
     expect(
       writesTemplateReference(plan(true, item('missing', 'no permission')), link('Synced'), answers('create'))
     ).to.equal(false);
+  });
+});
+
+describe('custom filter class names', () => {
+  it('removes the CAB namespace only for a target without a namespace', () => {
+    expect(targetClassName('lb.TopSpenders', '')).to.equal('TopSpenders');
+    expect(targetClassName('lb.TopSpenders', 'lb__')).to.equal('lb.TopSpenders');
+    expect(targetClassName('MyCompanyFilter', 'lb__')).to.equal('MyCompanyFilter');
   });
 });

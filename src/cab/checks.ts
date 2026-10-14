@@ -31,10 +31,21 @@ export function usedFields(nodes: FileNode[]): Map<string, Set<string>> {
   return out;
 }
 
-export function usedClasses(nodes: FileNode[]): string[] {
+/**
+ * The class name that the target org uses. CAB stores the name with its namespace ("lb.Class") in an
+ * org with the namespace. In an org without it (a CAB development org), the same class has no prefix.
+ * A name without a prefix can be a customer class, so it never gets one.
+ */
+export function targetClassName(name: string, targetNs: string): string {
+  const cabPrefix = 'lb.';
+  return !targetNs && name.toLowerCase().startsWith(cabPrefix) ? name.slice(cabPrefix.length) : name;
+}
+
+export function usedClasses(nodes: FileNode[], targetNs = 'lb__'): string[] {
   return nodes
     .map((n) => n.fields.CustomFilterClassName__c)
-    .filter((c): c is string => typeof c === 'string' && c.length > 0);
+    .filter((c): c is string => typeof c === 'string' && c.length > 0)
+    .map((c) => targetClassName(c, targetNs));
 }
 
 /**
@@ -93,7 +104,7 @@ export function treeProblems(
         problems.push({ kind: 'field', object, field });
     }
   }
-  for (const className of new Set(usedClasses(nodes)))
+  for (const className of new Set(usedClasses(nodes, ns)))
     if (!classes.has(className)) problems.push({ kind: 'class', className });
   return problems;
 }

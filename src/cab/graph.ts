@@ -1,5 +1,6 @@
 import type { FieldValues, FileNode, FileTemplateReference } from './model.js';
 import type { CabOrg } from './org.js';
+import { targetClassName } from './checks.js';
 import { addNs, definitionFields, ObjectInfo } from './schema.js';
 
 export type GraphNode = {
@@ -59,7 +60,11 @@ export class GraphBuilder {
     const allowed = sets[mode];
     const ns = this.target.schema.ns;
     const out: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(fields)) if (allowed.has(key)) out[addNs(key, ns)] = value ?? null;
+    for (const [key, value] of Object.entries(fields)) {
+      if (!allowed.has(key)) continue;
+      out[addNs(key, ns)] =
+        key === 'CustomFilterClassName__c' && typeof value === 'string' ? targetClassName(value, ns) : value ?? null;
+    }
     for (const [key, value] of Object.entries(extra)) {
       if (this.object(objectName).fields.has(key)) out[addNs(key, ns)] = value;
     }

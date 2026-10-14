@@ -436,7 +436,10 @@ export async function buildPlan(
   const objects = [...new Set(allTrees.flatMap((t) => [...usedFields(t).keys()]))];
   const [targetFields, classes, running] = await Promise.all([
     loadTargetFields(target, objects),
-    loadExistingClasses(target, allTrees.flatMap(usedClasses)),
+    loadExistingClasses(
+      target,
+      allTrees.flatMap((t) => usedClasses(t, target.schema.ns))
+    ),
     loadRunningVersions(
       target,
       matched.map((h) => h.versionId).filter((v): v is string => Boolean(v))
