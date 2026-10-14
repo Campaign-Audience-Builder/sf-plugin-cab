@@ -15,16 +15,16 @@
 
 ## 3. Export
 
-- [ ] 3.1 Query audiences, folders, versions, components, and filter trees in bulk (no query per audience)
-- [ ] 3.2 Resolve the selection: `--all`, `--name` (API name, then name, with ambiguity and "did you mean" messages), `--folder` with subfolders
-- [ ] 3.3 Add the sequence closure with nesting, cycle detection, and the "added because" message
-- [ ] 3.4 Skip audiences without an API name, and the sequences that use them, with reasons
-- [ ] 3.5 Collect the templates and outcome definitions that the selected audiences use, with their filter trees, one time each
-- [ ] 3.6 Convert records to the file form: no Ids, local `ref` values for self-lookups, keys for folders, templates, and outcome definitions, no namespace prefix (D7)
-- [ ] 3.7 Flag Id-like filter values with the key prefixes from describe-global (D11)
-- [ ] 3.8 Write the file with sorted keys, the default file name, and overwrite protection
-- [ ] 3.9 Implement `list` with the folder filter and the "cannot be exported" markers
-- [ ] 3.10 Implement the interactive selection list, grouped by folder and searchable (D4)
+- [x] 3.1 Query audiences, folders, versions, components, and filter trees in bulk (no query per audience)
+- [x] 3.2 Resolve the selection: `--all`, `--name` (API name, then name, with ambiguity and "did you mean" messages), `--folder` with subfolders
+- [x] 3.3 Add the sequence closure with nesting, cycle detection, and the "added because" message
+- [x] 3.4 Skip audiences without an API name, and the sequences that use them, with reasons
+- [x] 3.5 Collect the templates and outcome definitions that the selected audiences use, with their filter trees, one time each
+- [x] 3.6 Convert records to the file form: no Ids, local `ref` values for self-lookups, keys for folders, templates, and outcome definitions, no namespace prefix (D7)
+- [x] 3.7 Flag Id-like filter values with the key prefixes from describe-global (D11)
+- [x] 3.8 Write the file with sorted keys, the default file name, and overwrite protection
+- [x] 3.9 Implement `list` with the folder filter and the "cannot be exported" markers
+- [x] 3.10 Implement the interactive selection list, grouped by folder and searchable (D4)
 
 ## 4. Import planning
 

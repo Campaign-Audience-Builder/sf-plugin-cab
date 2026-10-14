@@ -42,7 +42,10 @@ describe('candidate object list', () => {
       .filter((l) => definition.has(l.referenceTo))
       .map((l) => l.field.split('.')[0])
       .filter((object) => !candidates.has(object) && !(object in OUTSIDE_THE_DEFINITION));
-    expect([...new Set(uncovered)], 'add these objects to CANDIDATE_OBJECTS or to OUTSIDE_THE_DEFINITION').to.deep.equal([]);
+    expect(
+      [...new Set(uncovered)],
+      'add these objects to CANDIDATE_OBJECTS or to OUTSIDE_THE_DEFINITION'
+    ).to.deep.equal([]);
   });
 
   it('has a reference rule for every lookup on a definition object', () => {

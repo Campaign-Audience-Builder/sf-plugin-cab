@@ -20,5 +20,7 @@ export function stableStringify(value: unknown): string {
 }
 
 export function sha256(value: unknown): string {
-  return createHash('sha256').update(JSON.stringify(sortKeys(value))).digest('hex');
+  return createHash('sha256')
+    .update(JSON.stringify(sortKeys(value)))
+    .digest('hex');
 }

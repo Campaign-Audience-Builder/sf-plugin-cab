@@ -13,7 +13,11 @@ export async function resolveOrg(aliasOrUsername?: string): Promise<Org> {
     try {
       return await Org.create({});
     } catch {
-      throw new SfError(messages.getMessage('error.noDefaultOrg'), 'NoDefaultOrg', messages.getMessages('error.noDefaultOrg.actions'));
+      throw new SfError(
+        messages.getMessage('error.noDefaultOrg'),
+        'NoDefaultOrg',
+        messages.getMessages('error.noDefaultOrg.actions')
+      );
     }
   }
   try {

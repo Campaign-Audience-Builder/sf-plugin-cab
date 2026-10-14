@@ -17,7 +17,12 @@ export const DEFINITION_OBJECTS = [
 ] as const;
 
 /** Objects outside the definition that the plugin reads or creates. */
-export const SUPPORT_OBJECTS = ['AudienceFolder__c', 'OutcomeDefinition__c', 'OutcomeDefinitionVersion__c', 'AudienceRun__c'] as const;
+export const SUPPORT_OBJECTS = [
+  'AudienceFolder__c',
+  'OutcomeDefinition__c',
+  'OutcomeDefinitionVersion__c',
+  'AudienceRun__c',
+] as const;
 
 export const CANDIDATE_OBJECTS = [...DEFINITION_OBJECTS, ...SUPPORT_OBJECTS] as const;
 
@@ -234,7 +239,10 @@ export function referenceRule(objectName: string, fieldName: string): ReferenceR
  * D5: a field is written only if it exists in both orgs, it is createable in the target, and it is not
  * on the deny-list. `fileFields` are the field names that the file has for this object.
  */
-export function writableFields(target: ObjectInfo, fileFields: Iterable<string>): { write: string[]; missing: string[] } {
+export function writableFields(
+  target: ObjectInfo,
+  fileFields: Iterable<string>
+): { write: string[]; missing: string[] } {
   const write: string[] = [];
   const missing: string[] = [];
   for (const name of fileFields) {

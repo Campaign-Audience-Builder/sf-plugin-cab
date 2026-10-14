@@ -9,12 +9,18 @@ export const importFlags = {
   'dry-run': Flags.boolean({ char: 'd', summary: messages.getMessage('flags.dry-run.summary') }),
   yes: Flags.boolean({ char: 'y', summary: messages.getMessage('flags.yes.summary') }),
   'fail-fast': Flags.boolean({ summary: messages.getMessage('flags.fail-fast.summary') }),
-  'missing-folders': Flags.option({ options: missingOptions, summary: messages.getMessage('flags.missing-folders.summary') })(),
+  'missing-folders': Flags.option({
+    options: missingOptions,
+    summary: messages.getMessage('flags.missing-folders.summary'),
+  })(),
   'missing-templates': Flags.option({
     options: missingOptions,
     summary: messages.getMessage('flags.missing-templates.summary'),
   })(),
-  'missing-outcomes': Flags.option({ options: missingOptions, summary: messages.getMessage('flags.missing-outcomes.summary') })(),
+  'missing-outcomes': Flags.option({
+    options: missingOptions,
+    summary: messages.getMessage('flags.missing-outcomes.summary'),
+  })(),
 };
 
 export type ImportResult = {

@@ -1,13 +1,16 @@
 import { Messages } from '@salesforce/core';
 import { Flags, SfCommand } from '@salesforce/sf-plugins-core';
+import { ExportedAudience, runExport } from '../../../cab/exportFlow.js';
 import { targetOrgFlag, verboseFlag } from '../../../cab/flags.js';
+import { connectCab } from '../../../cab/org.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@campaign-audience-builder/sf-plugin-cab', 'cab.audience.export');
 
 export type ExportResult = {
   file: string;
-  audiences: Array<{ name: string; apiName: string; status: 'exported' | 'skipped'; reason?: string }>;
+  audiences: ExportedAudience[];
+  warnings: string[];
 };
 
 export default class AudienceExport extends SfCommand<ExportResult> {
@@ -31,7 +34,20 @@ export default class AudienceExport extends SfCommand<ExportResult> {
   };
 
   public async run(): Promise<ExportResult> {
-    await this.parse(AudienceExport);
-    return { file: '', audiences: [] };
+    const { flags } = await this.parse(AudienceExport);
+    const cab = await connectCab(flags['target-org']);
+    const outcome = await runExport(this, cab, {
+      all: flags.all,
+      names: flags.name,
+      folders: flags.folder,
+      outputFile: flags['output-file'],
+      overwrite: flags.overwrite,
+      verbose: flags.verbose,
+      json: this.jsonEnabled(),
+      pluginVersion: this.config.pjson.version,
+    });
+    // Exit code 68: some audiences that the admin selected were skipped.
+    if (outcome.partial) process.exitCode = 68;
+    return { file: outcome.path, audiences: outcome.audiences, warnings: outcome.warnings };
   }
 }
