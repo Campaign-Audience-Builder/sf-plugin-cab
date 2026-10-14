@@ -6,15 +6,23 @@ Use it to copy audiences from a sandbox to production at a go-live, to keep a UA
 
 ## Install
 
+The sf CLI asks before it installs a plugin that Salesforce did not sign. Only Salesforce can sign plugins for the sf CLI, so it asks for every plugin from another publisher. To install with no question, add the plugin to the allowlist of the sf CLI first:
+
 ```sh
+sf plugins trust allowlist add --name @campaign-audience-builder/sf-plugin-cab
 sf plugins install @campaign-audience-builder/sf-plugin-cab
 ```
 
-The package is signed. The sf CLI verifies the signature and does not ask you to trust an unsigned plugin. To update the plugin, run `sf plugins update`.
+Without the allowlist, `sf plugins install` asks one time if you want to continue. Answer `y`.
+
+The package is published from this repository by GitHub Actions, with npm provenance. To check that the package you install was built from this repository, look for "Provenance" on the [npm page](https://www.npmjs.com/package/@campaign-audience-builder/sf-plugin-cab), or run `npm audit signatures` in a project that has the package.
+
+To update the plugin, run `sf plugins update`.
 
 You need:
 
-- The sf CLI, with an alias for each org (`sf org login web --alias uat`).
+- A current sf CLI that uses Node 22 or newer. Run `sf update` to get it. With an older sf CLI, the plugin stops and tells you to update.
+- An alias for each org (`sf org login web --alias uat`).
 - Campaign Audience Builder in each org.
 - In the target org, create, edit, and delete access to the CAB objects. The permission set `CampaignAudienceBuilderUser` gives this access.
 

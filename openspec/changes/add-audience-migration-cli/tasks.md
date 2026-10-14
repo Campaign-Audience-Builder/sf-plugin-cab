@@ -71,4 +71,4 @@
 ## 8. Release
 
 - [x] 8.1 Add the licence file (Apache-2.0 unless decided otherwise) and the licence field in package.json
-- [ ] 8.2 Sign the npm package, publish version 1.0.0, and confirm `sf plugins install` with no unsigned-plugin prompt
+- [ ] 8.2 Publish version 1.0.0 to npm with provenance from GitHub Actions, and confirm `sf plugins install` with no prompt after `sf plugins trust allowlist add` (the sf CLI accepts signatures only from developer.salesforce.com, so a signed package is not possible)
