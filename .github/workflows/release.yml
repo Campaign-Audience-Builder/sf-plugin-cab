@@ -2,7 +2,8 @@ name: release
 
 # Publishes the plugin to npm with provenance when a version tag (v1.0.0) is pushed.
 # npm then shows that the package was built from this repository and this commit.
-# Publish access: an npm trusted publisher for this repository and workflow, or the secret NPM_TOKEN.
+# Publish access: the npm trusted publisher for this repository, this workflow, and the environment npm.
+# The job gets a short-lived OIDC credential from GitHub, so there is no npm token.
 on:
   push:
     tags: ['v*.*.*']
@@ -35,5 +36,3 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
