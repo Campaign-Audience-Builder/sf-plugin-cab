@@ -6,4 +6,8 @@ export default [
     // This plugin is not a Salesforce project, so the Salesforce copyright header does not apply.
     rules: { 'header/header': 'off' },
   },
+  {
+    // Salesforce API names such as Audience__c are not camel case.
+    rules: { camelcase: 'off' },
+  },
 ];

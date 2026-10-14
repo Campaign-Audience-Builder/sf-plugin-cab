@@ -7,11 +7,11 @@
 
 ## 2. Org and schema layer
 
-- [ ] 2.1 Detect the CAB namespace (`lb__` or none) and the CAB package version of an org; fail with the "not installed" message if CAB is missing
-- [ ] 2.2 Read the org name, the user, and the sandbox flag for the org line on the plan screen
-- [ ] 2.3 Describe the candidate objects, skip missing objects, and build the list of writable fields from the field rules and the deny-list (D5)
-- [ ] 2.4 Check create, edit, and delete access on the definition objects for the running user
-- [ ] 2.5 Add a unit test that fails when a CAB object with a lookup into the definition is not on the candidate list
+- [x] 2.1 Detect the CAB namespace (`lb__` or none) and the CAB package version of an org; fail with the "not installed" message if CAB is missing
+- [x] 2.2 Read the org name, the user, and the sandbox flag for the org line on the plan screen
+- [x] 2.3 Describe the candidate objects, skip missing objects, and build the list of writable fields from the field rules and the deny-list (D5)
+- [x] 2.4 Check create, edit, and delete access on the definition objects for the running user
+- [x] 2.5 Add a unit test that fails when a CAB object with a lookup into the definition is not on the candidate list
 
 ## 3. Export
 
