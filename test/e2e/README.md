@@ -17,14 +17,26 @@ sf org assign permset -o cabplugin-master -n CampaignAudienceBuilderUser -n Camp
 sf apex run -o cabplugin-master -f test/e2e/seed-audiences.apex
 ```
 
-Do the same for `cabplugin-s26` with the summer26 source, and also assign `FilterLibraryManagement` and
-`OutcomeManagement`.
+Do the same for `cabplugin-master2` with the master source, and for `cabplugin-s26` with the summer26
+source. In `cabplugin-s26`, also assign `FilterLibraryManagement` and `OutcomeManagement`.
+
+For a packaged org, create a scratch org from a project without a namespace, and install a released
+package version. The package assigns the CAB permission sets itself:
+
+```sh
+sf org create scratch -v <dev hub> -f config/project-scratch-def.json -a cabplugin-pkg -y 7 -w 60
+sf package install -p <04t of the newest released version> -o cabplugin-pkg -w 60 --no-prompt
+```
 
 ## Checks and results of 2026-10-14
 
 | Task | Command | Result |
 | --- | --- | --- |
-| 7.2 | Note: 7.2 used one master org as source and target. A second master org was not created. | |
+| 7.2 | `export -o cabplugin-master --all`, `import -o cabplugin-master2 --missing-folders create ... --yes` | 7 created, 3 folders created. |
+| 7.2 | The same import again | 7 unchanged. |
+| 7.2 | A changed filter value and a changed component order, then `import` of the backup file | 2 updated, then 2 restored. The original file shows 7 unchanged. |
+| Packaged | `migrate --source-org cabplugin-master --target-org cabplugin-pkg --all --missing-folders create --yes` (package 1.216.0.4 installed, `lb__` objects) | Org line shows "CAB 1.216.0". 7 created. The next run shows 7 unchanged. |
+| Packaged | `migrate --source-org cabplugin-pkg --target-org cabplugin-s26 --all --dry-run` | The plan works. The file has no `lb__` prefix and no record Ids except the source org Id and the flagged `OwnerId` value. |
 | 7.2 | `export -o cabplugin-master --all` two times | The files differ only in `exportedAt`. |
 | 7.2 | `import -o cabplugin-master --file <export>` | 5 unchanged. |
 | 7.2 | Change one filter value, `import --yes` | 1 updated. Same version Id, old filter objects deleted, `LastConfigurationChange__c` set. |
@@ -41,5 +53,6 @@ Do the same for `cabplugin-s26` with the summer26 source, and also assign `Filte
 | 5.6 | An audience with 600 filters | "Large: not atomic". Written in 2 graphs. The next run shows it unchanged. |
 | 5.4 | Outcome definition missing in the target, `--missing-outcomes create` | Definition, version 1, and condition tree created. No assignment and no measurement. The audience node links to it. |
 
-Not tested against an org: Ctrl+C during an import, `--fail-fast` with several failures, and an import
-into a packaged (`lb__`) subscriber org.
+Not tested against an org: Ctrl+C during an import, and `--fail-fast` with several failures. The released
+package 1.216.0.4 has no summer26 objects, so template links and outcome definitions are not tested in a
+packaged org.

@@ -61,7 +61,7 @@
 ## 7. Verification
 
 - [x] 7.1 Unit tests for selection, closure, file conversion, hashing, reference rules, ordering, and node counts
-- [ ] 7.2 End-to-end test on two scratch orgs with the master CAB schema: export all, import, import again (all unchanged), restore from the backup
+- [x] 7.2 End-to-end test on two scratch orgs with the master CAB schema: export all, import, import again (all unchanged), restore from the backup
 - [x] 7.3 End-to-end test from a summer26 org into a master org and back, to confirm that missing objects and fields give warnings and no failure
 - [x] 7.4 Test that an import into a target audience with a schedule keeps the schedule linked to the same version
 - [x] 7.5 Test a forced failure in the last graph node and confirm that the target audience did not change
