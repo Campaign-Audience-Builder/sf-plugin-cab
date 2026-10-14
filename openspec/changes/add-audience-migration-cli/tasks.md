@@ -28,35 +28,35 @@
 
 ## 4. Import planning
 
-- [ ] 4.1 Read and validate the file and its format version
-- [ ] 4.2 Match audiences by API name (case-insensitive), and find target-only audiences
-- [ ] 4.3 Normalize and hash both sides, and mark unchanged audiences (D9)
-- [ ] 4.4 Resolve references with the rules in D6: folders, components, templates, outcome definitions, and cleared links with warnings
-- [ ] 4.5 Check each audience: objects and fields in the target (Tooling API `FieldDefinition`), custom filter classes, outcome definitions, runs in progress
-- [ ] 4.6 Order audiences by sequence dependencies, and propagate "blocked" to dependent sequences
-- [ ] 4.7 Count graph nodes for each audience, and mark audiences above 500 nodes as "large: not atomic"
-- [ ] 4.8 Match templates and outcome definitions by `UniqueName__c`, then by unique name; find missing and differing records (D12)
-- [ ] 4.9 Spike: create an outcome definition with its template tree through REST in a summer26 scratch org, run a tally, and record if it works; if not, remove `create` from `--missing-outcomes`
-- [ ] 4.10 Render the plan screen (D3) with numbers first, sections of at most 10 lines, and `--verbose` for all lines
+- [x] 4.1 Read and validate the file and its format version
+- [x] 4.2 Match audiences by API name (case-insensitive), and find target-only audiences
+- [x] 4.3 Normalize and hash both sides, and mark unchanged audiences (D9)
+- [x] 4.4 Resolve references with the rules in D6: folders, components, templates, outcome definitions, and cleared links with warnings
+- [x] 4.5 Check each audience: objects and fields in the target (Tooling API `FieldDefinition`), custom filter classes, outcome definitions, runs in progress
+- [x] 4.6 Order audiences by sequence dependencies, and propagate "blocked" to dependent sequences
+- [x] 4.7 Count graph nodes for each audience, and mark audiences above 500 nodes as "large: not atomic"
+- [x] 4.8 Match templates and outcome definitions by `UniqueName__c`, then by unique name; find missing and differing records (D12)
+- [x] 4.9 Spike: create an outcome definition with its template tree through REST in a summer26 scratch org, run a tally, and record if it works; if not, remove `create` from `--missing-outcomes`
+- [x] 4.10 Render the plan screen (D3) with numbers first, sections of at most 10 lines, and `--verbose` for all lines
 
 ## 5. Import execution
 
-- [ ] 5.1 Ask the folder, template, and outcome questions and the final confirmation, with flag equivalents, safe defaults, and the non-interactive stop
-- [ ] 5.2 Write the backup file before the first write
-- [ ] 5.3 Create missing folders in parent-first order
+- [x] 5.1 Ask the folder, template, and outcome questions and the final confirmation, with flag equivalents, safe defaults, and the non-interactive stop
+- [x] 5.2 Write the backup file before the first write
+- [x] 5.3 Create missing folders in parent-first order
 - [ ] 5.4 Create missing templates and outcome definitions (one graph each) before the audiences that use them; on failure, clear the links or block the audiences as the spec says
-- [ ] 5.5 Build one Composite Graph per audience (D8): audience, version, components, old tree deletes, new tree inserts, and `LastConfigurationChange__c` set to now
-- [ ] 5.6 Implement the non-atomic path for large audiences (insert new records, then delete old records)
-- [ ] 5.7 Run the graphs one at a time, with one retry on `UNABLE_TO_LOCK_ROW`, `--fail-fast`, and dependent skips after a failure
-- [ ] 5.8 Translate Salesforce errors into messages with the audience, the field, and the Salesforce text
-- [ ] 5.9 Show progress, handle Ctrl+C after the current audience, and write the report file
-- [ ] 5.10 Show the summary with the counts, the failures, the report and backup paths, and the command to run again
+- [x] 5.5 Build one Composite Graph per audience (D8): audience, version, components, old tree deletes, new tree inserts, and `LastConfigurationChange__c` set to now
+- [x] 5.6 Implement the non-atomic path for large audiences (insert new records, then delete old records)
+- [x] 5.7 Run the graphs one at a time, with one retry on `UNABLE_TO_LOCK_ROW`, `--fail-fast`, and dependent skips after a failure
+- [x] 5.8 Translate Salesforce errors into messages with the audience, the field, and the Salesforce text
+- [x] 5.9 Show progress, handle Ctrl+C after the current audience, and write the report file
+- [x] 5.10 Show the summary with the counts, the failures, the report and backup paths, and the command to run again
 
 ## 6. Migrate and shared behavior
 
-- [ ] 6.1 Implement `migrate` as export to a kept file, then import, with the same-org check
-- [ ] 6.2 Implement `--json` output for all commands, and the exit codes 0, 1, and 68
-- [ ] 6.3 Hide record Ids and stack traces unless `--verbose` is given
+- [x] 6.1 Implement `migrate` as export to a kept file, then import, with the same-org check
+- [x] 6.2 Implement `--json` output for all commands, and the exit codes 0, 1, and 68
+- [x] 6.3 Hide record Ids and stack traces unless `--verbose` is given
 
 ## 7. Verification
 
