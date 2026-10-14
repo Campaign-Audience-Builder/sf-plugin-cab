@@ -1,7 +1,13 @@
 import { expect } from 'chai';
 import { exportSkips, resolveSelection, Selectable, sequenceClosure } from '../../src/cab/selection.js';
 
-const a = (id: string, name: string, apiName: string | null, folderPath: string | null = null, componentIds: string[] = []): Selectable => ({
+const a = (
+  id: string,
+  name: string,
+  apiName: string | null,
+  folderPath: string | null = null,
+  componentIds: string[] = []
+): Selectable => ({
   id,
   name,
   apiName,

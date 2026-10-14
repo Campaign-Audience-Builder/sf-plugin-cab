@@ -63,4 +63,6 @@ export type ExportFile = {
   templates: FileTemplate[];
   outcomeDefinitions: FileOutcome[];
   audiences: FileAudience[];
+  /** Set in a backup file: the org of the import, and the audiences that the import created. A restore does not remove them. */
+  backup?: { of: string; createdAudiences: string[] };
 };

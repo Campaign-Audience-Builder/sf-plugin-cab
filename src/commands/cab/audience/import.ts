@@ -1,6 +1,9 @@
 import { Messages } from '@salesforce/core';
 import { Flags, SfCommand } from '@salesforce/sf-plugins-core';
 import { missingOptions, targetOrgFlag, verboseFlag } from '../../../cab/flags.js';
+import { readExportFile } from '../../../cab/importFile.js';
+import { ImportOutcome, runImportFlow } from '../../../cab/importFlow.js';
+import { connectCab } from '../../../cab/org.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@campaign-audience-builder/sf-plugin-cab', 'cab.audience.import');
@@ -23,9 +26,7 @@ export const importFlags = {
   })(),
 };
 
-export type ImportResult = {
-  audiences: Array<{ name: string; apiName: string; status: string; reason?: string; targetId?: string }>;
-};
+export type ImportResult = ImportOutcome;
 
 export default class AudienceImport extends SfCommand<ImportResult> {
   public static readonly summary = messages.getMessage('summary');
@@ -40,7 +41,22 @@ export default class AudienceImport extends SfCommand<ImportResult> {
   };
 
   public async run(): Promise<ImportResult> {
-    await this.parse(AudienceImport);
-    return { audiences: [] };
+    const { flags } = await this.parse(AudienceImport);
+    const file = await readExportFile(flags.file);
+    const cab = await connectCab(flags['target-org']);
+    const outcome = await runImportFlow(this, cab, flags.file, file, {
+      dryRun: flags['dry-run'],
+      yes: flags.yes,
+      failFast: flags['fail-fast'],
+      missingFolders: flags['missing-folders'],
+      missingTemplates: flags['missing-templates'],
+      missingOutcomes: flags['missing-outcomes'],
+      verbose: flags.verbose,
+      json: this.jsonEnabled(),
+      pluginVersion: this.config.pjson.version,
+      rerunCommand: `sf cab audience import -o ${cab.alias} --file ${flags.file}`,
+    });
+    process.exitCode = outcome.exitCode;
+    return outcome;
   }
 }
