@@ -60,8 +60,8 @@ const ID_PATTERN = /^[a-zA-Z0-9]{15}(?:[a-zA-Z0-9]{3})?$/;
 export function findIdLikeValues(
   nodes: FileNode[],
   keyPrefixes: Map<string, string>
-): Array<{ field: string; value: string; object: string }> {
-  const out: Array<{ field: string; value: string; object: string }> = [];
+): Array<{ field: string; value: string; object: string; filter: string }> {
+  const out: Array<{ field: string; value: string; object: string; filter: string }> = [];
   for (const n of nodes) {
     for (const f of n.filters) {
       for (const valueField of ['Value__c', 'ValueLong__c']) {
@@ -70,7 +70,10 @@ export function findIdLikeValues(
         for (const part of value.split(/[,;\n]/).map((p) => p.trim().replace(/^['"]|['"]$/g, ''))) {
           if (!ID_PATTERN.test(part)) continue;
           const object = keyPrefixes.get(part.slice(0, 3));
-          if (object) out.push({ field: str(f.fields.FilterFieldAPIName__c) ?? valueField, value: part, object });
+          const field = str(f.fields.FilterFieldAPIName__c) ?? valueField;
+          // Value__c and ValueLong__c often hold the same value. Report it one time.
+          if (object && !out.some((o) => o.field === field && o.value === part && o.filter === f.ref))
+            out.push({ field, value: part, object, filter: f.ref });
         }
       }
     }
@@ -227,7 +230,12 @@ export async function buildExport(
     format: FORMAT,
     exportedAt: now.toISOString().replace(/\.\d{3}Z$/, 'Z'),
     plugin: `sf-plugin-cab ${pluginVersion}`,
-    source: { org: cab.orgName, orgId: cab.orgId, isSandbox: cab.isSandbox, cabVersion: cab.cabVersion },
+    source: {
+      org: cab.orgName,
+      orgId: cab.orgId,
+      isSandbox: cab.isSandbox && !cab.isScratch,
+      cabVersion: cab.cabVersion,
+    },
     folders: folders.sort(byKey((f) => f.path)),
     templates: templates.sort(byKey((t) => t.key)),
     outcomeDefinitions: outcomeDefinitions.sort(byKey((o) => o.key)),

@@ -38,34 +38,17 @@ export function usedClasses(nodes: FileNode[]): string[] {
 }
 
 /**
- * Reads the field names of the given objects in the target, with the Tooling API `FieldDefinition`.
- * If the query fails for an object, the reader uses describe. Field names are lower case.
+ * Reads the field names of the given objects in the target, with describe. The Tooling API
+ * `FieldDefinition` is not used, because it does not list the parts of compound fields, such as
+ * Contact.MailingCountry and Contact.LastName. Field names are lower case.
  */
 export async function loadTargetFields(cab: CabOrg, objects: string[]): Promise<Map<string, Set<string>>> {
   const out = new Map<string, Set<string>>();
   const existing = objects.filter((o) => cab.objectNames.has(o.toLowerCase()));
   await Promise.all(
     existing.map(async (object) => {
-      try {
-        const result = await cab.conn.tooling.query<{ QualifiedApiName: string }>(
-          `SELECT QualifiedApiName FROM FieldDefinition WHERE EntityDefinition.QualifiedApiName = '${object.replace(
-            /'/g,
-            "\\'"
-          )}'`
-        );
-        let records = result.records;
-        let next = result.nextRecordsUrl;
-        while (next) {
-          // eslint-disable-next-line no-await-in-loop
-          const more = await cab.conn.tooling.queryMore<{ QualifiedApiName: string }>(next);
-          records = records.concat(more.records);
-          next = more.nextRecordsUrl;
-        }
-        out.set(object.toLowerCase(), new Set(records.map((r) => r.QualifiedApiName.toLowerCase())));
-      } catch {
-        const d = (await cab.conn.describe(object)) as unknown as { fields: Array<{ name: string }> };
-        out.set(object.toLowerCase(), new Set(d.fields.map((f) => f.name.toLowerCase())));
-      }
+      const d = (await cab.conn.describe(object)) as unknown as { fields: Array<{ name: string }> };
+      out.set(object.toLowerCase(), new Set(d.fields.map((f) => f.name.toLowerCase())));
     })
   );
   return out;

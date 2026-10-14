@@ -1,5 +1,6 @@
 import { Messages } from '@salesforce/core';
-import { Flags, SfCommand } from '@salesforce/sf-plugins-core';
+import { Flags } from '@salesforce/sf-plugins-core';
+import { CabCommand } from '../../../cab/command.js';
 import { missingOptions, targetOrgFlag, verboseFlag } from '../../../cab/flags.js';
 import { readExportFile } from '../../../cab/importFile.js';
 import { ImportOutcome, runImportFlow } from '../../../cab/importFlow.js';
@@ -28,7 +29,7 @@ export const importFlags = {
 
 export type ImportResult = ImportOutcome;
 
-export default class AudienceImport extends SfCommand<ImportResult> {
+export default class AudienceImport extends CabCommand<ImportResult> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');

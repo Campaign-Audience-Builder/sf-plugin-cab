@@ -1,5 +1,6 @@
 import { Messages, SfError } from '@salesforce/core';
-import { Flags, SfCommand } from '@salesforce/sf-plugins-core';
+import { Flags } from '@salesforce/sf-plugins-core';
+import { CabCommand } from '../../../cab/command.js';
 import { runExport } from '../../../cab/exportFlow.js';
 import { orgFlag, verboseFlag } from '../../../cab/flags.js';
 import { runImportFlow } from '../../../cab/importFlow.js';
@@ -12,7 +13,7 @@ const messages = Messages.loadMessages('@campaign-audience-builder/sf-plugin-cab
 
 export type MigrateResult = ImportResult & { file: string; exportWarnings: string[] };
 
-export default class AudienceMigrate extends SfCommand<MigrateResult> {
+export default class AudienceMigrate extends CabCommand<MigrateResult> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');

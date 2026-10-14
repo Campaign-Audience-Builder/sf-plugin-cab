@@ -1,5 +1,6 @@
 import { Messages } from '@salesforce/core';
-import { Flags, SfCommand } from '@salesforce/sf-plugins-core';
+import { Flags } from '@salesforce/sf-plugins-core';
+import { CabCommand } from '../../../cab/command.js';
 import { ExportedAudience, runExport } from '../../../cab/exportFlow.js';
 import { targetOrgFlag, verboseFlag } from '../../../cab/flags.js';
 import { connectCab } from '../../../cab/org.js';
@@ -13,7 +14,7 @@ export type ExportResult = {
   warnings: string[];
 };
 
-export default class AudienceExport extends SfCommand<ExportResult> {
+export default class AudienceExport extends CabCommand<ExportResult> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');

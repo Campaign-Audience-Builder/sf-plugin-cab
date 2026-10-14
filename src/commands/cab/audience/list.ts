@@ -1,5 +1,6 @@
 import { Messages } from '@salesforce/core';
-import { Flags, SfCommand } from '@salesforce/sf-plugins-core';
+import { Flags } from '@salesforce/sf-plugins-core';
+import { CabCommand } from '../../../cab/command.js';
 import { loadCatalog } from '../../../cab/exporter.js';
 import { targetOrgFlag, verboseFlag } from '../../../cab/flags.js';
 import { connectCab, orgLine } from '../../../cab/org.js';
@@ -23,7 +24,7 @@ export type ListRow = {
 
 export type ListResult = { org: string; audiences: ListRow[] };
 
-export default class AudienceList extends SfCommand<ListResult> {
+export default class AudienceList extends CabCommand<ListResult> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');

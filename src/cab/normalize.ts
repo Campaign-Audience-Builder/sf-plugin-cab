@@ -131,12 +131,10 @@ export function projectTree(
           }))
         : [],
       templateReferences: allowed('AudienceFilterTemplateReference__c')
-        ? n.templateReferences
-            .filter(keepRef)
-            .map((t) => ({
-              template: t.template,
-              fields: project(t.fields, allowed('AudienceFilterTemplateReference__c')),
-            }))
+        ? n.templateReferences.filter(keepRef).map((t) => ({
+            template: t.template,
+            fields: project(t.fields, allowed('AudienceFilterTemplateReference__c')),
+          }))
         : [],
     })
   );

@@ -34,7 +34,7 @@ export function isProduction(org: Pick<CabOrg, 'isSandbox' | 'isScratch'>): bool
 /** "Acme Corp (PRODUCTION)" or "Acme UAT (sandbox)". */
 export function orgLabel(org: Pick<CabOrg, 'orgName' | 'isSandbox' | 'isScratch'>): string {
   if (isProduction(org)) return `${org.orgName} (PRODUCTION)`;
-  return `${org.orgName} (${org.isSandbox ? 'sandbox' : 'scratch org'})`;
+  return `${org.orgName} (${org.isScratch ? 'scratch org' : 'sandbox'})`;
 }
 
 /** The org line of the plan screen: "Acme Corp (PRODUCTION) · admin@acme.com · CAB 1.121.0". */
@@ -110,7 +110,7 @@ export async function connectCab(org: Org, givenAlias?: string): Promise<CabOrg>
     orgId: orgRecord.Id,
     orgName: orgRecord.Name,
     isSandbox: orgRecord.IsSandbox,
-    isScratch: !orgRecord.IsSandbox && Boolean(orgRecord.TrialExpirationDate),
+    isScratch: Boolean(orgRecord.TrialExpirationDate),
     cabVersion,
     schema,
     objectNames,
