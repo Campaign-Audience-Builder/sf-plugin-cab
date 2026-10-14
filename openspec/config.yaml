@@ -1,0 +1,40 @@
+schema: spec-driven
+
+context: |
+  sf CLI plugin (oclif, TypeScript, @salesforce/sf-plugins-core + @salesforce/core) that admins install
+  with `sf plugins install` to move Campaign Audience Builder (CAB) audiences between Salesforce orgs.
+  CAB is a managed package with namespace `lb`. The plugin must work against any CAB package version:
+  object and field lists are read from describe at runtime, and objects missing in an org are skipped.
+  Users are Salesforce admins, not developers. Messages must be plain, actionable, and never show raw
+  stack traces by default. Auth always comes from the admin's existing sf CLI org aliases (`-o`).
+
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+# Add your tech stack, conventions, style guides, domain knowledge, etc.
+# Example:
+#   context: |
+#     Tech stack: TypeScript, React, Node.js
+#     We use conventional commits
+#     Domain: e-commerce platform
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing
