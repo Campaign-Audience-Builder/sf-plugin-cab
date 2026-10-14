@@ -53,6 +53,13 @@ sf package install -p <04t of the newest released version> -o cabplugin-pkg -w 6
 | 5.6 | An audience with 600 filters | "Large: not atomic". Written in 2 graphs. The next run shows it unchanged. |
 | 5.4 | Outcome definition missing in the target, `--missing-outcomes create` | Definition, version 1, and condition tree created. No assignment and no measurement. The audience node links to it. |
 
+## Release 1.0.0 (2026-10-14)
+
+| Check | Result |
+| --- | --- |
+| `release.yml` on tag `v1.0.0` | Published `@campaign-audience-builder/sf-plugin-cab@1.0.0` as `latest`, with a SLSA provenance statement. |
+| `sf plugins trust allowlist add --name @campaign-audience-builder/sf-plugin-cab`, then `sf plugins install @campaign-audience-builder/sf-plugin-cab` (sf 2.151.7, temporary data and config folders) | Installed v1.0.0 with no question. `sf cab audience list -o cabplugin-pkg` works. |
+
 Not tested against an org: Ctrl+C during an import, and `--fail-fast` with several failures. The released
 package 1.216.0.4 has no summer26 objects, so template links and outcome definitions are not tested in a
 packaged org.
