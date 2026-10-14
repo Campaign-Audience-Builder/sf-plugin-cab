@@ -1,9 +1,9 @@
 ## 1. Scaffold
 
-- [ ] 1.1 Generate the plugin with `sf dev generate plugin` (TypeScript, oclif, `@salesforce/sf-plugins-core`) and set the npm package name
-- [ ] 1.2 Add the `cab audience` topic with empty `list`, `export`, `import`, and `migrate` commands, their flags, and `--help` examples
-- [ ] 1.3 Set up lint, unit tests (mocha + `@salesforce/core` test context), and a GitHub Actions workflow for lint and tests
-- [ ] 1.4 Write the README: install, first migration in three commands, go-live example, CI example, restore from a backup
+- [x] 1.1 Generate the plugin with `sf dev generate plugin` (TypeScript, oclif, `@salesforce/sf-plugins-core`) and set the npm package name
+- [x] 1.2 Add the `cab audience` topic with empty `list`, `export`, `import`, and `migrate` commands, their flags, and `--help` examples
+- [x] 1.3 Set up lint, unit tests (mocha + `@salesforce/core` test context), and a GitHub Actions workflow for lint and tests
+- [x] 1.4 Write the README: install, first migration in three commands, go-live example, CI example, restore from a backup
 
 ## 2. Org and schema layer
 
@@ -70,5 +70,5 @@
 
 ## 8. Release
 
-- [ ] 8.1 Add the licence file (Apache-2.0 unless decided otherwise) and the licence field in package.json
+- [x] 8.1 Add the licence file (Apache-2.0 unless decided otherwise) and the licence field in package.json
 - [ ] 8.2 Sign the npm package, publish version 1.0.0, and confirm `sf plugins install` with no unsigned-plugin prompt

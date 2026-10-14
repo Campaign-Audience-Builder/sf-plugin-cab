@@ -1,0 +1,79 @@
+{
+  "name": "@campaign-audience-builder/sf-plugin-cab",
+  "description": "sf CLI plugin for admins to move Campaign Audience Builder audiences between Salesforce orgs",
+  "version": "0.1.0",
+  "author": "Campaign Audience Builder",
+  "license": "Apache-2.0",
+  "bugs": "https://github.com/Campaign-Audience-Builder/sf-plugin-cab/issues",
+  "homepage": "https://github.com/Campaign-Audience-Builder/sf-plugin-cab",
+  "repository": "Campaign-Audience-Builder/sf-plugin-cab",
+  "type": "module",
+  "exports": "./lib/index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "/lib",
+    "/messages",
+    "/npm-shrinkwrap.json",
+    "/oclif.lock",
+    "/oclif.manifest.json"
+  ],
+  "keywords": [
+    "salesforce",
+    "sf",
+    "sf-plugin",
+    "campaign-audience-builder",
+    "cab"
+  ],
+  "dependencies": {
+    "@inquirer/core": "^12.0.4",
+    "@inquirer/prompts": "^8.7.3",
+    "@oclif/core": "^5.1.8",
+    "@salesforce/core": "^9.3.6",
+    "@salesforce/sf-plugins-core": "^13.0.7"
+  },
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "sf",
+    "topicSeparator": " ",
+    "devPlugins": [
+      "@oclif/plugin-help"
+    ],
+    "topics": {
+      "cab": {
+        "description": "Commands for Campaign Audience Builder.",
+        "subtopics": {
+          "audience": {
+            "description": "List, export, import, and migrate Campaign Audience Builder audiences."
+          }
+        }
+      }
+    },
+    "flexibleTaxonomy": true
+  },
+  "scripts": {
+    "build": "npm run compile && npm run lint",
+    "compile": "tsc -p . --pretty",
+    "clean": "rm -rf lib oclif.manifest.json *.tsbuildinfo .eslintcache",
+    "lint": "eslint src test --cache --cache-location .eslintcache",
+    "format": "prettier --write \"+(src|test)/**/*.+(ts|js|json)\"",
+    "test": "npm run test:compile && npm run test:only",
+    "test:compile": "tsc -p ./test --pretty --noEmit",
+    "test:only": "nyc mocha \"test/**/*.test.ts\"",
+    "prepack": "npm run clean && npm run compile && oclif manifest && oclif readme",
+    "postpack": "rm -f oclif.manifest.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@oclif/plugin-help": "^7.0.4",
+    "@salesforce/dev-scripts": "^15.0.0",
+    "@types/node": "^18.19.130",
+    "eslint-plugin-sf-plugin": "^3.0.1",
+    "oclif": "^5.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
+}
