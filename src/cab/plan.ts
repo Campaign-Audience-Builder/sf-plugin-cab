@@ -2,7 +2,7 @@ import { Messages } from '@salesforce/core';
 import { loadExistingClasses, loadTargetFields, treeProblems, usedClasses, usedFields } from './checks.js';
 import { convertTree, KeyResolver } from './convert.js';
 import { buildExport, Catalog, findIdLikeValues, loadCatalog } from './exporter.js';
-import type { MissingAnswer } from './flags.js';
+import type { DefaultAnswer, MissingAnswer } from './flags.js';
 import { sha256 } from './json.js';
 import { LibraryMatch, matchLibrary } from './library.js';
 import type {
@@ -41,7 +41,13 @@ export const MAX_GRAPH_NODES = 500;
  */
 export const OUTCOME_CREATE_SUPPORTED = false;
 
-export type Answers = { folders: MissingAnswer; templates: MissingAnswer; outcomes: MissingAnswer };
+export type Answers = {
+  folders: MissingAnswer;
+  templates: MissingAnswer;
+  outcomes: MissingAnswer;
+  /** For a created template that is a default in the source: keep the default setting, or clear it. */
+  templateDefaults: DefaultAnswer;
+};
 
 export type Action = 'create' | 'update' | 'unchanged' | 'blocked';
 

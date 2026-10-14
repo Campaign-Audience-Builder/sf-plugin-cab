@@ -1,7 +1,7 @@
 import { Messages } from '@salesforce/core';
 import { Flags } from '@salesforce/sf-plugins-core';
 import { CabCommand } from '../../../cab/command.js';
-import { missingOptions, targetOrgFlag, verboseFlag } from '../../../cab/flags.js';
+import { defaultOptions, missingOptions, targetOrgFlag, verboseFlag } from '../../../cab/flags.js';
 import { readExportFile } from '../../../cab/importFile.js';
 import { ImportOutcome, runImportFlow } from '../../../cab/importFlow.js';
 import { connectCab } from '../../../cab/org.js';
@@ -20,6 +20,10 @@ export const importFlags = {
   'missing-templates': Flags.option({
     options: missingOptions,
     summary: messages.getMessage('flags.missing-templates.summary'),
+  })(),
+  'template-defaults': Flags.option({
+    options: defaultOptions,
+    summary: messages.getMessage('flags.template-defaults.summary'),
   })(),
   'missing-outcomes': Flags.option({
     options: missingOptions,
@@ -52,6 +56,7 @@ export default class AudienceImport extends CabCommand<ImportResult> {
       missingFolders: flags['missing-folders'],
       missingTemplates: flags['missing-templates'],
       missingOutcomes: flags['missing-outcomes'],
+      templateDefaults: flags['template-defaults'],
       verbose: flags.verbose,
       json: this.jsonEnabled(),
       pluginVersion: this.config.pjson.version,

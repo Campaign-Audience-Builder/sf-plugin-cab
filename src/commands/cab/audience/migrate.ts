@@ -53,6 +53,7 @@ export default class AudienceMigrate extends CabCommand<MigrateResult> {
       missingFolders: flags['missing-folders'],
       missingTemplates: flags['missing-templates'],
       missingOutcomes: flags['missing-outcomes'],
+      templateDefaults: flags['template-defaults'],
       verbose: flags.verbose,
       json: this.jsonEnabled(),
       pluginVersion: this.config.pjson.version,

@@ -110,3 +110,19 @@ The import stopped. To continue, run the same command again: %s
 # summary.rerun
 
 After a fix, run the import again: %s
+
+# dryRun.flag
+
+The import asks what to do with them. In a pipeline, give the answer with %s create, skip, or fail.
+
+# question.defaults.header
+
+%s of the templates to create are default templates in the source org. Campaign Audience Builder applies a default template to every new audience in %s:
+
+# question.defaults
+
+Keep them as default templates? Then they apply to all new audiences in %s, not only to the imported audiences. If you answer "no", the import creates them as normal templates.
+
+# error.needDefaultsFlag
+
+%s of the templates to create are default templates, which apply to every new audience in the org. Add --template-defaults keep or clear.

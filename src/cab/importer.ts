@@ -231,7 +231,13 @@ async function createTemplates(ctx: RunContext, used: Set<string>): Promise<Libr
       label: item.entry.name,
       outcomeId: (key) => ctx.outcomeIds.get(key),
       templateRefTarget: () => undefined,
-      rootExtra: hasUnique ? { UniqueName__c: item.entry.key } : undefined,
+      rootExtra: {
+        ...(hasUnique ? { UniqueName__c: item.entry.key } : {}),
+        // A default template applies to every new audience in the org, so it stays a default only if the admin says so.
+        ...(ctx.plan.answers.templateDefaults === 'clear'
+          ? { IsDefault__c: false, IsLocked__c: false, DefaultApplicationMode__c: null, LockedNodeContexts__c: null }
+          : {}),
+      },
     });
     const plan = g.build();
     // eslint-disable-next-line no-await-in-loop

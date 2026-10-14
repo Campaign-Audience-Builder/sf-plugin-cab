@@ -3,7 +3,7 @@ import { dirname, join, resolve } from 'node:path';
 import { Messages, SfError } from '@salesforce/core';
 import type { SfCommand } from '@salesforce/sf-plugins-core';
 import { safeAlias, timestamp } from './exporter.js';
-import type { MissingAnswer } from './flags.js';
+import type { DefaultAnswer, MissingAnswer } from './flags.js';
 import { AudienceResult, ImportRun, LibraryResult, runImport, Status } from './importer.js';
 import { stableStringify } from './json.js';
 import type { ExportFile } from './model.js';
@@ -24,6 +24,7 @@ export type ImportOptions = {
   missingFolders?: MissingAnswer;
   missingTemplates?: MissingAnswer;
   missingOutcomes?: MissingAnswer;
+  templateDefaults?: DefaultAnswer;
   verbose: boolean;
   json: boolean;
   pluginVersion: string;
@@ -136,6 +137,39 @@ function questions(plan: Plan, answers: Answers, opts: ImportOptions): Question[
   return out;
 }
 
+/** The templates that the import creates and that are a default in the source org. */
+export function defaultTemplatesToCreate(plan: Plan, answers: Answers): string[] {
+  if (answers.templates !== 'create') return [];
+  return [...plan.templates.values()]
+    .filter((t) => t.match.status !== 'matched' && !t.cannotCreate && usersOf(plan, 'template', t.entry.key))
+    .filter((t) => t.entry.tree.some((n) => !n.parent && n.fields.IsDefault__c === true))
+    .map((t) => t.entry.name);
+}
+
+/**
+ * Asks if created templates keep their default setting. A default template applies to every new
+ * audience in the target org, so the safe answer is "no" (clear).
+ */
+async function askTemplateDefaults(
+  ui: Ui,
+  plan: Plan,
+  answers: Answers,
+  opts: ImportOptions,
+  interactive: boolean
+): Promise<void> {
+  const names = defaultTemplatesToCreate(plan, answers);
+  if (!names.length || opts.templateDefaults) return;
+  if (!interactive) throw stop(messages.getMessage('error.needDefaultsFlag', [names.length]));
+  ui.log('');
+  ui.log(messages.getMessage('question.defaults.header', [names.length, plan.target.orgName]));
+  names.forEach((n) => ui.log(`  ${n}`));
+  const keep = await ui.confirm({
+    message: messages.getMessage('question.defaults', [plan.target.orgName]),
+    defaultAnswer: false,
+  });
+  answers.templateDefaults = keep ? 'keep' : 'clear';
+}
+
 function backupPath(file: string, alias: string, now: Date): string {
   return join(dirname(resolve(file)), `cab-backup-${safeAlias(alias)}-${timestamp(now)}.json`);
 }
@@ -184,6 +218,7 @@ export async function runImportFlow(
     folders: opts.missingFolders ?? 'create',
     templates: opts.missingTemplates ?? 'create',
     outcomes: opts.missingOutcomes ?? 'create',
+    templateDefaults: opts.templateDefaults ?? 'clear',
   };
   ui.spinner.start(messages.getMessage('planning', [cab.orgName]));
   const plan = await buildPlan(cab, file, answers, opts.pluginVersion);
@@ -210,6 +245,13 @@ export async function runImportFlow(
   };
 
   if (opts.dryRun) {
+    // The dry run lists the missing records, but it asks nothing.
+    for (const q of questions(plan, answers, opts)) {
+      ui.log('');
+      ui.log(messages.getMessage('question.header', [q.count, q.noun, cab.orgName]));
+      show(limitLines(q.lines, opts.verbose));
+      ui.log(messages.getMessage('dryRun.flag', [q.flag]));
+    }
     ui.log('');
     ui.log(messages.getMessage('dryRun'));
     return { ...result(undefined), exitCode: 0 };
@@ -219,8 +261,14 @@ export async function runImportFlow(
   const interactive = isInteractive(opts.json);
   const qs = questions(plan, answers, opts);
   const missingFlags = qs.filter((q) => !q.answer && !interactive);
-  if (missingFlags.length) {
-    throw stop(missingFlags.map((q) => messages.getMessage('error.needFlag', [q.count, q.noun, q.flag])).join('\n'));
+  const defaultsNeeded =
+    !interactive &&
+    !opts.templateDefaults &&
+    defaultTemplatesToCreate(plan, { ...answers, templates: opts.missingTemplates ?? answers.templates }).length;
+  if (missingFlags.length || defaultsNeeded) {
+    const lines = missingFlags.map((q) => messages.getMessage('error.needFlag', [q.count, q.noun, q.flag]));
+    if (defaultsNeeded) lines.push(messages.getMessage('error.needDefaultsFlag', [defaultsNeeded]));
+    throw stop(lines.join('\n'));
   }
   for (const q of qs) {
     let answer = q.answer;
@@ -234,6 +282,7 @@ export async function runImportFlow(
     if (answer === 'fail') throw stop(messages.getMessage('error.failAnswer', [q.count, q.noun, cab.orgName, q.flag]));
     q.set(answer);
   }
+  await askTemplateDefaults(ui, plan, answers, opts, interactive);
   evaluatePlan(plan, answers);
   const c = counts(plan);
   const writes = c.create + c.update;

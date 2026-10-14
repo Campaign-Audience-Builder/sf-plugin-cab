@@ -52,3 +52,6 @@ export { orgFlag };
 
 export const missingOptions = ['create', 'skip', 'fail'] as const;
 export type MissingAnswer = (typeof missingOptions)[number];
+
+export const defaultOptions = ['keep', 'clear'] as const;
+export type DefaultAnswer = (typeof defaultOptions)[number];

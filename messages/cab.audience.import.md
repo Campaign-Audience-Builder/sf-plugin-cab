@@ -55,3 +55,7 @@ What to do with Filter Library templates that do not exist in the target org: cr
 # flags.missing-outcomes.summary
 
 What to do with outcome definitions that do not exist in the target org: create them, skip them (the audiences that use them are blocked), or fail before any change.
+
+# flags.template-defaults.summary
+
+For created Filter Library templates that are default templates in the source org: keep the default setting, or clear it. A default template applies to every new audience in the target org.
