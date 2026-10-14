@@ -53,7 +53,10 @@ Run any command with `--help` for all flags and examples.
 - Each audience is written in **one transaction**. If a part fails, the target audience does not change.
 - An update keeps the target audience version and sequence components. Schedules, run history, and campaign members stay linked.
 - Audiences that did not change are not written. Thus a second run of the same import is fast and changes nothing.
-- Folders, Filter Library templates, and outcome definitions are matched by their unique name. The import can create missing ones. It never changes ones that exist in the target.
+- Folders, Filter Library templates, and outcome definitions are matched by their unique name, then by their name. The import can create missing ones. It never changes ones that exist in the target.
+- A created outcome definition gets its configuration only: the definition, its latest version, and its conditions. Cohorts, control groups, and measurements stay in the source org.
+- A Filter Library template that is a default template in the source org applies to every new audience in the target org. Before the import creates such a template, it asks if it stays a default template. The default answer is "no".
+- CAB lets only its own UI create a Locked template link. If the import cannot create a template link, it imports the audience without the link and warns. The template conditions are then not part of the audience, so link the template again in the target org.
 - Target audiences that are not in the file stay unchanged.
 - Filter values that look like record Ids give a warning, because an Id from one org can be wrong in another org.
 
@@ -77,7 +80,8 @@ In a pipeline, the command never asks. Give each answer with a flag. If an answe
 sf cab audience import -o prod --file audiences/golive.json \
   --missing-folders create \
   --missing-templates create \
-  --missing-outcomes fail \
+  --missing-outcomes create \
+  --template-defaults clear \
   --yes --json
 ```
 

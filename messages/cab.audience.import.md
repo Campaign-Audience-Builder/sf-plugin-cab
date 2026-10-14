@@ -22,7 +22,7 @@ Before the first change, the command writes a backup file of the target audience
 
 - Import in a CI pipeline, with no questions:
 
-  <%= config.bin %> <%= command.id %> --target-org prod --file golive.json --missing-folders create --missing-templates create --missing-outcomes fail --yes
+  <%= config.bin %> <%= command.id %> --target-org prod --file golive.json --missing-folders create --missing-templates create --missing-outcomes create --template-defaults clear --yes
 
 - Restore the audiences from a backup file:
 

@@ -20,7 +20,7 @@ The command keeps the export file. Use it to repeat the import, or to import the
 
 - Copy two audiences in a CI pipeline, with no questions:
 
-  <%= config.bin %> <%= command.id %> --source-org uat --target-org prod --name Leads_DE --name Leads_AT --missing-folders create --missing-templates create --missing-outcomes fail --yes
+  <%= config.bin %> <%= command.id %> --source-org uat --target-org prod --name Leads_DE --name Leads_AT --missing-folders create --missing-templates create --missing-outcomes create --template-defaults clear --yes
 
 # flags.source-org.summary
 

@@ -60,13 +60,13 @@
 
 ## 7. Verification
 
-- [ ] 7.1 Unit tests for selection, closure, file conversion, hashing, reference rules, ordering, and node counts
+- [x] 7.1 Unit tests for selection, closure, file conversion, hashing, reference rules, ordering, and node counts
 - [ ] 7.2 End-to-end test on two scratch orgs with the master CAB schema: export all, import, import again (all unchanged), restore from the backup
-- [ ] 7.3 End-to-end test from a summer26 org into a master org and back, to confirm that missing objects and fields give warnings and no failure
-- [ ] 7.4 Test that an import into a target audience with a schedule keeps the schedule linked to the same version
-- [ ] 7.5 Test a forced failure in the last graph node and confirm that the target audience did not change
-- [ ] 7.6 Test non-interactive runs: no selection, missing folders and templates without flags (one message names both), and `--yes` with all flags
-- [ ] 7.7 Test that an import never changes a template that exists in the target, also when it differs from the file
+- [x] 7.3 End-to-end test from a summer26 org into a master org and back, to confirm that missing objects and fields give warnings and no failure
+- [x] 7.4 Test that an import into a target audience with a schedule keeps the schedule linked to the same version
+- [x] 7.5 Test a forced failure in the last graph node and confirm that the target audience did not change
+- [x] 7.6 Test non-interactive runs: no selection, missing folders and templates without flags (one message names both), and `--yes` with all flags
+- [x] 7.7 Test that an import never changes a template that exists in the target, also when it differs from the file
 
 ## 8. Release
 
