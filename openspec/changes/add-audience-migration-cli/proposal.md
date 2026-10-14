@@ -27,6 +27,6 @@ None. This is the first change in the repo.
 
 ## Impact
 
-- New repo `Campaign-Audience-Builder/sf-plugin-cab` (public). New npm package for the plugin.
+- New repo `Campaign-Audience-Builder/sf-plugin-cab` (public). New npm package for the plugin, published with npm provenance. Only Salesforce can sign sf CLI plugins, so admins add the plugin to the sf CLI allowlist to install it with no question.
 - No change to the CAB managed package is necessary for version 1. The plugin uses the `UniqueName__c` key on Filter Library templates and outcome definitions when the field exists. A separate CAB change adds this field on the summer26 release.
 - The plugin uses the Salesforce REST API (query, describe, Composite Graph). Each imported audience uses one or two API calls in the target org.

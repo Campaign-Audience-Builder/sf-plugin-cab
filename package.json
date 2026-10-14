@@ -1,12 +1,15 @@
 {
   "name": "@campaign-audience-builder/sf-plugin-cab",
   "description": "sf CLI plugin for admins to move Campaign Audience Builder audiences between Salesforce orgs",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Campaign Audience Builder",
   "license": "Apache-2.0",
   "bugs": "https://github.com/Campaign-Audience-Builder/sf-plugin-cab/issues",
   "homepage": "https://github.com/Campaign-Audience-Builder/sf-plugin-cab",
-  "repository": "Campaign-Audience-Builder/sf-plugin-cab",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Campaign-Audience-Builder/sf-plugin-cab.git"
+  },
   "type": "module",
   "exports": "./lib/index.js",
   "engines": {
@@ -50,7 +53,10 @@
         }
       }
     },
-    "flexibleTaxonomy": true
+    "flexibleTaxonomy": true,
+    "hooks": {
+      "init": "./lib/hooks/nodeVersion.js"
+    }
   },
   "scripts": {
     "build": "npm run compile && npm run lint",
@@ -61,7 +67,7 @@
     "test": "npm run test:compile && npm run test:only",
     "test:compile": "tsc -p ./test --pretty --noEmit",
     "test:only": "nyc mocha \"test/**/*.test.ts\"",
-    "prepack": "npm run clean && npm run compile && oclif manifest && oclif readme",
+    "prepack": "npm run clean && npm run compile && oclif manifest",
     "postpack": "rm -f oclif.manifest.json"
   },
   "publishConfig": {

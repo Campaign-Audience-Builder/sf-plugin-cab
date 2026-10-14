@@ -1,0 +1,39 @@
+name: release
+
+# Publishes the plugin to npm with provenance when a version tag (v1.0.0) is pushed.
+# npm then shows that the package was built from this repository and this commit.
+# Publish access: an npm trusted publisher for this repository and workflow, or the secret NPM_TOKEN.
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: read
+  id-token: write # npm provenance and trusted publishing
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # The environment can require an approval before the publish starts (repository settings).
+    environment: npm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm 11.5 or newer.
+      - run: npm install -g npm@11
+      - name: Check that the tag matches the package version
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "The tag $GITHUB_REF_NAME does not match the package version $version."
+            exit 1
+          fi
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
