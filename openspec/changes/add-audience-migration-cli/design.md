@@ -42,6 +42,7 @@ sf cab audience list     -o <org> [--folder <path>]...
 sf cab audience export   -o <org> (--all | --name <n>... | --folder <path>...) [--output-file <f>] [--overwrite]
 sf cab audience import   -o <org> --file <f> [--dry-run] [--yes] [--fail-fast]
                          [--missing-folders create|skip|fail] [--missing-templates create|skip|fail] [--missing-outcomes create|skip|fail]
+                         [--template-defaults keep|clear]
 sf cab audience migrate  --source-org <a> --target-org <b> (selection flags) (import flags) [--output-file <f>]
 ```
 
@@ -166,6 +167,12 @@ The export file is one JSON file with sorted keys and two-space indentation, so 
 
 Field names in the file have no namespace prefix. The plugin adds the prefix of each org. `ref` values are local to one audience, and they encode the self-lookups (`parent`, `aggregateChainStart`). `format` has a major version. The plugin refuses a newer major version with "Update the plugin: sf plugins update".
 
+Implementation notes (2026-10-14):
+- A template entry is `{ "key", "name", "tree" }`. An outcome entry also has `fields` and `version` (the snapshot of the latest version).
+- A node has `templateReferences` (a list, because CAB allows up to 10 links on one node), `outcome` (a key), and `aggregateChainStart` (a `ref`). Filters and data inclusions have `ref` values too, because data inclusions and sort configurations refer to them.
+- A record can have `clearedLinks`: the reference fields that pointed outside the definition (D6). The import warns about each one.
+- The tree is in a canonical order: siblings sort by their content, so the same tree gives the same file in every org.
+
 ### D8. Write path: one Composite Graph per audience
 
 For each audience, in sequence order, the plugin builds one graph:
@@ -199,7 +206,9 @@ The export stores each used template and outcome definition one time, with its f
 
 A template is a filter tree with `IsTemplate__c = true` and no audience version. The tree-copy logic of D8 creates it.
 
-An outcome definition is more complex. It has a template tree (`OutcomeTemplateRoot__c`) and `OutcomeDefinitionVersion__c` snapshots. There is no trigger on `OutcomeDefinition__c`. Apex service code creates the versions, and a REST insert does not run that code. Task 4.10 is a spike that creates a definition through REST in a summer26 org and runs a tally. If the definition works, `--missing-outcomes create` stays in version 1. If it does not work, version 1 offers only `skip` and `fail` for outcome definitions, and the plan tells the admin to create the definition in the target UI first. The specs do not change in either case, except that `create` becomes unavailable.
+An outcome definition is more complex. It has a template tree (`OutcomeTemplateRoot__c`) and `OutcomeDefinitionVersion__c` snapshots. There is no trigger on `OutcomeDefinition__c`. Apex service code creates the versions, and a REST insert does not run that code. Task 4.9 is a spike that creates a definition through REST in a summer26 org and runs a tally. If the definition works, `--missing-outcomes create` stays in version 1. If it does not work, version 1 offers only `skip` and `fail` for outcome definitions, and the plan tells the admin to create the definition in the target UI first. The specs do not change in either case, except that `create` becomes unavailable.
+
+Result (2026-10-14, see spike-4.9-outcome-create.md): the REST-made definition works, so `create` stays. Decision: the import creates the configuration only (definition, version 1 with the source snapshot, condition tree), never cohorts, control groups, assignments, or measurements. The file carries the latest version snapshot. The plan refuses a snapshot with source-org record Ids and checks the `OutcomeManagement` access.
 
 Alternative: never create, link only. This was rejected because a go-live into an empty org then blocks every audience that uses a template or an outcome.
 
@@ -210,7 +219,9 @@ Alternative: never create, link only. This was rejected because a go-live into a
 - [A filter value with an org-specific Id gives a wrong audience in the target] → The export and import warn with the audience and field. Id mapping is a non-goal for version 1.
 - [Unsigned plugin install prompt makes admins doubt the tool] → The npm package is signed, and the README shows the publisher and the verification step.
 - [A new CAB object in the definition is not on the candidate list] → The import still works, but the new object is not copied. A CAB release checklist item asks for the plugin update. A test compares the candidate list with the CAB object graph.
-- [A created outcome definition has no version snapshot and fails at its first tally] → The spike in task 4.10 decides if `create` is offered for outcome definitions.
+- [A created outcome definition has no version snapshot and fails at its first tally] → The spike in task 4.9 showed that a REST-made definition with a version snapshot works. The import creates version 1 from the snapshot in the file.
+- [A created template is a default template in the source org] → A default template applies to every new audience in the target org. The import asks before it keeps the default setting (`--template-defaults`), with "no" as the default answer.
+- [CAB refuses Locked template links outside its own Apex service, and no permission set grants create on template links] → The import writes the audience without such a link and warns that the template conditions are not part of the audience (decision of 2026-10-14).
 - [An import into production during a run] → The run-in-progress check blocks the audience. Runs that start after the check can still read a mix of old and new records. Each graph is atomic, so a run sees either the old or the new tree.
 
 ## Migration Plan

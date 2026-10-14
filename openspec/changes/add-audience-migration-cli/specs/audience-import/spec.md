@@ -166,6 +166,31 @@ If audiences in the file use templates or outcome definitions that are not in th
 - **WHEN** the target rejects a template that the import creates
 - **THEN** the import does not create the template, and it imports each audience that uses it without the link, with a warning
 
+### Requirement: Created outcome definitions hold the configuration only
+When the import creates an outcome definition, it SHALL create only its configuration: the definition, one version with the snapshot of the latest source version, and its condition tree. It SHALL NOT create cohorts, control groups, assignments to scheduled actions, or measurement data.
+
+#### Scenario: Admin creates a missing outcome definition
+- **WHEN** the outcome definition "Purchase within 30 days" is missing and the admin answers "yes"
+- **THEN** the import creates the definition, version 1, and the condition tree, and the target has no cohort, assignment, or measurement for it
+
+### Requirement: Created default templates
+If a template that the import creates is a default template in the source org, the import SHALL ask if it stays a default template. The question SHALL say that the template then applies to every new audience in the target org. The default answer SHALL be "no". The flag `--template-defaults keep|clear` SHALL give the answer without a question. With "clear", the import SHALL create the template as a normal template.
+
+#### Scenario: Admin keeps the default setting
+- **WHEN** the created template "Active Customers" is a default template in the source org and the admin answers "yes"
+- **THEN** the import creates it as a default template, and CAB applies it to new audiences in the target org
+
+#### Scenario: CI run without the flag
+- **WHEN** a non-interactive import must create a default template and has no `--template-defaults` flag
+- **THEN** the command stops before any change and names the flag
+
+### Requirement: Template links that the import cannot create
+If the import cannot create a link to a Filter Library template, it SHALL import the audience without the link and show a warning. This applies to Locked links, which CAB creates only through its own UI, and to Synced links when the user cannot create links. The warning SHALL say that the template conditions are not part of the imported audience, so the audience can select other records.
+
+#### Scenario: Audience with a Locked template link
+- **WHEN** an audience node has a Locked link to the template "Active Customers"
+- **THEN** the import writes the audience without the link, and the plan warns that the template conditions are not part of the audience and that the admin must link the template again
+
 ### Requirement: Other links
 For each other link to a record outside the audience definition, the import SHALL clear the link and show a warning that names the audience, the object, and the field. The import SHALL never write a record Id from the source org into the target.
 

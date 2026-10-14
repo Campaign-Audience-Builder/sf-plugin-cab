@@ -1,0 +1,598 @@
+{
+  "refs": [
+    "master",
+    "release/summer26"
+  ],
+  "lookups": [
+    {
+      "field": "AgentConversationMessage__c.AgentConversation__c",
+      "type": "MasterDetail",
+      "referenceTo": "AgentConversation__c"
+    },
+    {
+      "field": "Audience__c.AudienceFolder__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceFolder__c"
+    },
+    {
+      "field": "Audience__c.LastRunBy__c",
+      "type": "Lookup",
+      "referenceTo": "User"
+    },
+    {
+      "field": "Audience__c.LatestVersion__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceVersion__c"
+    },
+    {
+      "field": "Audience__c.ScheduledExecutionBlockRun__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRun__c"
+    },
+    {
+      "field": "AudienceActivationOutcome__c.AudienceRunAddedToCampaign__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRunAddedToCampaign__c"
+    },
+    {
+      "field": "AudienceActivationOutcome__c.Campaign__c",
+      "type": "Lookup",
+      "referenceTo": "Campaign"
+    },
+    {
+      "field": "AudienceActivationOutcome__c.OutcomeCohort__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeCohort__c"
+    },
+    {
+      "field": "AudienceActivationOutcome__c.ScheduledAction__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceScheduleTargetCampaign__c"
+    },
+    {
+      "field": "AudienceDataInclusion__c.AggregateQueryFilter__c",
+      "type": "Lookup",
+      "referenceTo": "QueryFilter__c"
+    },
+    {
+      "field": "AudienceDataInclusion__c.AudienceFilterObject__c",
+      "type": "MasterDetail",
+      "referenceTo": "AudienceFilterObject__c"
+    },
+    {
+      "field": "AudienceDataInclusion__c.CampaignMemberFieldMapping__c",
+      "type": "Lookup",
+      "referenceTo": "CampaignMemberFieldMapping__c"
+    },
+    {
+      "field": "AudienceDataInclusion__c.ExternalDataCollectionField__c",
+      "type": "Lookup",
+      "referenceTo": "ExternalDataCollectionField__c"
+    },
+    {
+      "field": "AudienceDataInclusion__c.ParentAudienceDataInclusion__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceDataInclusion__c"
+    },
+    {
+      "field": "AudienceFilterObject__c.AggregateChainStart__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceFilterObject__c"
+    },
+    {
+      "field": "AudienceFilterObject__c.AudienceVersion__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceVersion__c"
+    },
+    {
+      "field": "AudienceFilterObject__c.OutcomeDefinition__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeDefinition__c"
+    },
+    {
+      "field": "AudienceFilterObject__c.ParentAudienceFilterObject__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceFilterObject__c"
+    },
+    {
+      "field": "AudienceFilterTemplateReference__c.AudienceFilterObject__c",
+      "type": "MasterDetail",
+      "referenceTo": "AudienceFilterObject__c"
+    },
+    {
+      "field": "AudienceFilterTemplateReference__c.FilterTemplate__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceFilterObject__c"
+    },
+    {
+      "field": "AudienceFolder__c.ParentFolder__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceFolder__c"
+    },
+    {
+      "field": "AudienceMember__c.Account__c",
+      "type": "Lookup",
+      "referenceTo": "Account"
+    },
+    {
+      "field": "AudienceMember__c.AudienceVersion__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceVersion__c"
+    },
+    {
+      "field": "AudienceMember__c.Contact__c",
+      "type": "Lookup",
+      "referenceTo": "Contact"
+    },
+    {
+      "field": "AudienceMember__c.Lead__c",
+      "type": "Lookup",
+      "referenceTo": "Lead"
+    },
+    {
+      "field": "AudienceRun__c.ApprovalDecisionBy__c",
+      "type": "Lookup",
+      "referenceTo": "User"
+    },
+    {
+      "field": "AudienceRun__c.ApproverAssigned__c",
+      "type": "Lookup",
+      "referenceTo": "User"
+    },
+    {
+      "field": "AudienceRun__c.AudienceSequenceComponent__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceSequenceComponent__c"
+    },
+    {
+      "field": "AudienceRun__c.AudienceVersion__c",
+      "type": "MasterDetail",
+      "referenceTo": "AudienceVersion__c"
+    },
+    {
+      "field": "AudienceRun__c.Campaign__c",
+      "type": "Lookup",
+      "referenceTo": "Campaign"
+    },
+    {
+      "field": "AudienceRun__c.DeduplicationLimitAcknowledgedBy__c",
+      "type": "Lookup",
+      "referenceTo": "User"
+    },
+    {
+      "field": "AudienceRun__c.ErrorLog__c",
+      "type": "Lookup",
+      "referenceTo": "ErrorLog__c"
+    },
+    {
+      "field": "AudienceRun__c.ParentAudienceSequenceRun__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRun__c"
+    },
+    {
+      "field": "AudienceRun__c.RestartOfAudienceRun__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRun__c"
+    },
+    {
+      "field": "AudienceRun__c.SharingContextUser__c",
+      "type": "Lookup",
+      "referenceTo": "User"
+    },
+    {
+      "field": "AudienceRun__c.SourceAudienceRun__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRun__c"
+    },
+    {
+      "field": "AudienceRunAddedToCampaign__c.AudienceRun__c",
+      "type": "MasterDetail",
+      "referenceTo": "AudienceRun__c"
+    },
+    {
+      "field": "AudienceRunAddedToCampaign__c.Campaign__c",
+      "type": "Lookup",
+      "referenceTo": "Campaign"
+    },
+    {
+      "field": "AudienceRunAddedToCampaign__c.ExternalDataCollection__c",
+      "type": "Lookup",
+      "referenceTo": "ExternalDataCollection__c"
+    },
+    {
+      "field": "AudienceRunAddedToCampaign__c.FinalAction__c",
+      "type": "Lookup",
+      "referenceTo": "FinalAction__c"
+    },
+    {
+      "field": "AudienceRunAddedToCampaign__c.PardotImportJob__c",
+      "type": "Lookup",
+      "referenceTo": "PardotImportJob__c"
+    },
+    {
+      "field": "AudienceRunAddedToCampaign__c.ScheduledAction__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceScheduleTargetCampaign__c"
+    },
+    {
+      "field": "AudienceSchedule__c.ApproverUser__c",
+      "type": "Lookup",
+      "referenceTo": "User"
+    },
+    {
+      "field": "AudienceSchedule__c.ScheduledVersion__c",
+      "type": "MasterDetail",
+      "referenceTo": "AudienceVersion__c"
+    },
+    {
+      "field": "AudienceScheduleDetail__c.AudienceSchedule__c",
+      "type": "MasterDetail",
+      "referenceTo": "AudienceSchedule__c"
+    },
+    {
+      "field": "AudienceScheduleTargetCampaign__c.AudienceSchedule__c",
+      "type": "MasterDetail",
+      "referenceTo": "AudienceSchedule__c"
+    },
+    {
+      "field": "AudienceScheduleTargetCampaign__c.AudienceSequenceComponent__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceSequenceComponent__c"
+    },
+    {
+      "field": "AudienceScheduleTargetCampaign__c.ExternalDataCollection__c",
+      "type": "Lookup",
+      "referenceTo": "ExternalDataCollection__c"
+    },
+    {
+      "field": "AudienceScheduleTargetCampaign__c.FinalAction__c",
+      "type": "Lookup",
+      "referenceTo": "FinalAction__c"
+    },
+    {
+      "field": "AudienceScheduleTargetCampaign__c.TargetCampaign__c",
+      "type": "Lookup",
+      "referenceTo": "Campaign"
+    },
+    {
+      "field": "AudienceSequenceComponent__c.Audience__c",
+      "type": "Lookup",
+      "referenceTo": "Audience__c"
+    },
+    {
+      "field": "AudienceSequenceComponent__c.SequenceAudience__c",
+      "type": "MasterDetail",
+      "referenceTo": "Audience__c"
+    },
+    {
+      "field": "AudienceSnapshotChunk__c.AudienceVersion__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceVersion__c"
+    },
+    {
+      "field": "AudienceVersion__c.AcceptedBaselineRun__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRun__c"
+    },
+    {
+      "field": "AudienceVersion__c.Audience__c",
+      "type": "MasterDetail",
+      "referenceTo": "Audience__c"
+    },
+    {
+      "field": "AudienceVersion__c.LatestPersistedRunId__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRun__c"
+    },
+    {
+      "field": "BusinessUnitAssignment__c.User__c",
+      "type": "Lookup",
+      "referenceTo": "User"
+    },
+    {
+      "field": "CampaignMember.AudienceVersion__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceVersion__c"
+    },
+    {
+      "field": "CampaignMemberFieldMapping__c.AudienceScheduleAction__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceScheduleTargetCampaign__c"
+    },
+    {
+      "field": "DataExtensionAdditionRequest__c.AudienceRunUsageLog__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRunAddedToCampaign__c"
+    },
+    {
+      "field": "ExternalDataCollectionField__c.AudienceScheduleAction__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceScheduleTargetCampaign__c"
+    },
+    {
+      "field": "ExternalDataCollectionField__c.ExternalDataCollection__c",
+      "type": "MasterDetail",
+      "referenceTo": "ExternalDataCollection__c"
+    },
+    {
+      "field": "FinalActionInput__c.AudienceScheduleAction__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceScheduleTargetCampaign__c"
+    },
+    {
+      "field": "FinalActionInput__c.FinalAction__c",
+      "type": "MasterDetail",
+      "referenceTo": "FinalAction__c"
+    },
+    {
+      "field": "FinalActionResultIncludedField__c.FinalAction__c",
+      "type": "MasterDetail",
+      "referenceTo": "FinalAction__c"
+    },
+    {
+      "field": "IntermediateSortConfiguration__c.AudienceDataInclusion__c",
+      "type": "MasterDetail",
+      "referenceTo": "AudienceDataInclusion__c"
+    },
+    {
+      "field": "IntermediateSortConfiguration__c.AudienceFilterObject__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceFilterObject__c"
+    },
+    {
+      "field": "MarketingCloudImportRequest__c.AudienceRunUsageLog__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRunAddedToCampaign__c"
+    },
+    {
+      "field": "OutcomeBindingCatalog__c.OutcomeDefinition__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeDefinition__c"
+    },
+    {
+      "field": "OutcomeBindingCatalog__c.OutcomeDefinitionVersion__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeDefinitionVersion__c"
+    },
+    {
+      "field": "OutcomeCheckpointAggregate__c.OutcomeCohort__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeCohort__c"
+    },
+    {
+      "field": "OutcomeCheckpointAggregate__c.OutcomeCohortPin__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeCohortPin__c"
+    },
+    {
+      "field": "OutcomeCheckpointWork__c.AudienceRunAddedToCampaign__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRunAddedToCampaign__c"
+    },
+    {
+      "field": "OutcomeCheckpointWork__c.Campaign__c",
+      "type": "Lookup",
+      "referenceTo": "Campaign"
+    },
+    {
+      "field": "OutcomeCheckpointWork__c.OutcomeCohort__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeCohort__c"
+    },
+    {
+      "field": "OutcomeCheckpointWork__c.ScheduledAction__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceScheduleTargetCampaign__c"
+    },
+    {
+      "field": "OutcomeCohort__c.Audience__c",
+      "type": "Lookup",
+      "referenceTo": "Audience__c"
+    },
+    {
+      "field": "OutcomeCohort__c.AudienceRunAddedToCampaign__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRunAddedToCampaign__c"
+    },
+    {
+      "field": "OutcomeCohort__c.Campaign__c",
+      "type": "Lookup",
+      "referenceTo": "Campaign"
+    },
+    {
+      "field": "OutcomeCohort__c.ScheduledAction__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceScheduleTargetCampaign__c"
+    },
+    {
+      "field": "OutcomeCohortChunk__c.AudienceRunAddedToCampaign__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceRunAddedToCampaign__c"
+    },
+    {
+      "field": "OutcomeCohortChunk__c.Campaign__c",
+      "type": "Lookup",
+      "referenceTo": "Campaign"
+    },
+    {
+      "field": "OutcomeCohortChunk__c.OutcomeCohort__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeCohort__c"
+    },
+    {
+      "field": "OutcomeCohortChunk__c.ScheduledAction__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceScheduleTargetCampaign__c"
+    },
+    {
+      "field": "OutcomeCohortMatchChunk__c.OutcomeCohort__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeCohort__c"
+    },
+    {
+      "field": "OutcomeCohortMatchChunk__c.OutcomeCohortPin__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeCohortPin__c"
+    },
+    {
+      "field": "OutcomeCohortPin__c.OutcomeCohort__c",
+      "type": "MasterDetail",
+      "referenceTo": "OutcomeCohort__c"
+    },
+    {
+      "field": "OutcomeCohortPin__c.OutcomeDefinition__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeDefinition__c"
+    },
+    {
+      "field": "OutcomeCohortPin__c.OutcomeDefinitionVersion__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeDefinitionVersion__c"
+    },
+    {
+      "field": "OutcomeDefinition__c.OutcomeTemplateRoot__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceFilterObject__c"
+    },
+    {
+      "field": "OutcomeDefinitionAssignment__c.OutcomeDefinition__c",
+      "type": "MasterDetail",
+      "referenceTo": "OutcomeDefinition__c"
+    },
+    {
+      "field": "OutcomeDefinitionAssignment__c.ScheduledAction__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceScheduleTargetCampaign__c"
+    },
+    {
+      "field": "OutcomeDefinitionAssignment__c.SelfReferenceAcknowledgedBy__c",
+      "type": "Lookup",
+      "referenceTo": "User"
+    },
+    {
+      "field": "OutcomeDefinitionAssignment__c.SynchronizationSetting__c",
+      "type": "Lookup",
+      "referenceTo": "SynchronizationSetting__c"
+    },
+    {
+      "field": "OutcomeDefinitionVersion__c.OutcomeDefinition__c",
+      "type": "MasterDetail",
+      "referenceTo": "OutcomeDefinition__c"
+    },
+    {
+      "field": "OutcomeDefinitionVersion__c.OutcomeTemplateRoot__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceFilterObject__c"
+    },
+    {
+      "field": "OutcomeMeasurement__c.ActivationOutcome__c",
+      "type": "MasterDetail",
+      "referenceTo": "AudienceActivationOutcome__c"
+    },
+    {
+      "field": "OutcomeMeasurement__c.Audience__c",
+      "type": "Lookup",
+      "referenceTo": "Audience__c"
+    },
+    {
+      "field": "OutcomeMeasurement__c.Campaign__c",
+      "type": "Lookup",
+      "referenceTo": "Campaign"
+    },
+    {
+      "field": "OutcomeMeasurement__c.OutcomeCohort__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeCohort__c"
+    },
+    {
+      "field": "OutcomeMeasurement__c.OutcomeCohortPin__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeCohortPin__c"
+    },
+    {
+      "field": "OutcomeMeasurement__c.OutcomeDefinition__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeDefinition__c"
+    },
+    {
+      "field": "OutcomeMeasurement__c.OutcomeDefinitionVersion__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeDefinitionVersion__c"
+    },
+    {
+      "field": "OutcomeMeasurement__c.ScheduledAction__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceScheduleTargetCampaign__c"
+    },
+    {
+      "field": "OutcomePeriodRollup__c.Audience__c",
+      "type": "Lookup",
+      "referenceTo": "Audience__c"
+    },
+    {
+      "field": "OutcomePeriodRollup__c.OutcomeDefinition__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeDefinition__c"
+    },
+    {
+      "field": "OutcomePeriodRollup__c.OutcomeDefinitionVersion__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeDefinitionVersion__c"
+    },
+    {
+      "field": "OutcomeTimingFact__c.Audience__c",
+      "type": "Lookup",
+      "referenceTo": "Audience__c"
+    },
+    {
+      "field": "OutcomeTimingFact__c.OutcomeCohort__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeCohort__c"
+    },
+    {
+      "field": "OutcomeTimingFact__c.OutcomeCohortPin__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeCohortPin__c"
+    },
+    {
+      "field": "OutcomeTimingFact__c.OutcomeDefinition__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeDefinition__c"
+    },
+    {
+      "field": "OutcomeTimingFact__c.OutcomeDefinitionVersion__c",
+      "type": "Lookup",
+      "referenceTo": "OutcomeDefinitionVersion__c"
+    },
+    {
+      "field": "PardotImportJob__c.Campaign__c",
+      "type": "Lookup",
+      "referenceTo": "Campaign"
+    },
+    {
+      "field": "QueryFilter__c.AudienceFilterObject__c",
+      "type": "MasterDetail",
+      "referenceTo": "AudienceFilterObject__c"
+    },
+    {
+      "field": "QueryFilter__c.AudienceVersion__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceVersion__c"
+    },
+    {
+      "field": "SynchronizationSetting__c.Audience__c",
+      "type": "MasterDetail",
+      "referenceTo": "Audience__c"
+    },
+    {
+      "field": "SynchronizationSetting__c.AudienceSchedule__c",
+      "type": "Lookup",
+      "referenceTo": "AudienceSchedule__c"
+    },
+    {
+      "field": "SynchronizationSetting__c.SyncedToExternalDataCollection__c",
+      "type": "MasterDetail",
+      "referenceTo": "ExternalDataCollection__c"
+    }
+  ]
+}
