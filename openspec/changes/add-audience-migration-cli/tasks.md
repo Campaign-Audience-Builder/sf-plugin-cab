@@ -32,7 +32,7 @@
 - [x] 4.2 Match audiences by API name (case-insensitive), and find target-only audiences
 - [x] 4.3 Normalize and hash both sides, and mark unchanged audiences (D9)
 - [x] 4.4 Resolve references with the rules in D6: folders, components, templates, outcome definitions, and cleared links with warnings
-- [x] 4.5 Check each audience: objects and fields in the target (Tooling API `FieldDefinition`), custom filter classes, outcome definitions, runs in progress
+- [x] 4.5 Check each audience: objects and fields in the target (describe, because Tooling API `FieldDefinition` does not list compound field parts such as `MailingCountry`), custom filter classes, outcome definitions, runs in progress
 - [x] 4.6 Order audiences by sequence dependencies, and propagate "blocked" to dependent sequences
 - [x] 4.7 Count graph nodes for each audience, and mark audiences above 500 nodes as "large: not atomic"
 - [x] 4.8 Match templates and outcome definitions by `UniqueName__c`, then by unique name; find missing and differing records (D12)
