@@ -364,7 +364,7 @@ function summary(outcome: ImportOutcome, run: ImportRun, file: ExportFile, cab: 
     );
   }
   lines.push('', messages.getMessage('summary.report', [outcome.reportFile ?? '']));
-  if (outcome.backupFile)
+  if (outcome.backupFile && c.updated)
     lines.push(messages.getMessage('summary.backup', [outcome.backupFile, cab.alias, outcome.backupFile]));
   if (run.stopped && c.notProcessed) lines.push(messages.getMessage('summary.continue', [opts.rerunCommand]));
   else if (c.failed || c.blocked || c.skipped) lines.push(messages.getMessage('summary.rerun', [opts.rerunCommand]));

@@ -1,3 +1,4 @@
+import { resolve } from 'node:path';
 import { Messages, SfError } from '@salesforce/core';
 import type { SfCommand } from '@salesforce/sf-plugins-core';
 import { buildExport, Catalog, defaultExportPath, fileExists, loadCatalog, writeExportFile } from './exporter.js';
@@ -168,7 +169,7 @@ export async function runExport(ui: Ui, cab: CabOrg, opts: ExportOptions): Promi
   const exportIds = [...closure.ids].filter((id) => !skips.has(id));
   if (!exportIds.length) throw new SfError(messages.getMessage('error.nothing'), 'NothingToExport');
 
-  const path = opts.outputFile ?? defaultExportPath(cab.alias, now);
+  const path = opts.outputFile ? resolve(opts.outputFile) : defaultExportPath(cab.alias, now);
   if (fileExists(path) && !opts.overwrite) {
     const ok =
       isInteractive(opts.json) &&
