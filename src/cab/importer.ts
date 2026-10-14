@@ -259,6 +259,65 @@ async function createTemplates(ctx: RunContext, used: Set<string>): Promise<Libr
   return results;
 }
 
+/**
+ * 5.4: creates each missing outcome definition that an audience uses, one graph each: the condition tree,
+ * the definition, and version 1 with the snapshot from the file. Only the configuration: no cohorts,
+ * holdouts, assignments, or measurements.
+ */
+async function createOutcomes(ctx: RunContext, used: Set<string>): Promise<LibraryResult[]> {
+  const results: LibraryResult[] = [];
+  const hasUnique = ctx.target.schema.objects.get('OutcomeDefinition__c')?.fields.has('UniqueName__c');
+  for (const item of ctx.plan.outcomes.values()) {
+    if (item.match.status === 'matched' || item.cannotCreate || !used.has(item.entry.key) || !item.entry.version)
+      continue;
+    const g = new GraphBuilder(ctx.target, ctx.apiVersion);
+    addTree(g, item.entry.tree, {
+      prefix: 'o',
+      version: null,
+      label: item.entry.name,
+      outcomeId: () => undefined,
+      templateRefTarget: () => undefined,
+    });
+    const root = item.entry.tree.find((n) => !n.parent);
+    const rootRef = root ? ref(`o${root.ref}`) : null;
+    g.post(
+      'od',
+      'OutcomeDefinition__c',
+      g.body('OutcomeDefinition__c', item.entry.fields, 'create', {
+        OutcomeTemplateRoot__c: rootRef,
+        ...(hasUnique ? { UniqueName__c: item.entry.key } : {}),
+      }),
+      `${item.entry.name}: outcome definition`,
+      item.entry.fields
+    );
+    g.post(
+      'odv',
+      'OutcomeDefinitionVersion__c',
+      g.body('OutcomeDefinitionVersion__c', item.entry.version.fields, 'create', {
+        OutcomeDefinition__c: ref('od'),
+        OutcomeTemplateRoot__c: rootRef,
+        VersionNumber__c: 1,
+      }),
+      `${item.entry.name}: outcome version`,
+      item.entry.version.fields
+    );
+    const plan = g.build();
+    // eslint-disable-next-line no-await-in-loop
+    const result = await runNodes(ctx.target.conn, plan.nodes);
+    if (result.ok) {
+      const id = result.ids.get('od')!;
+      ctx.outcomeIds.set(item.entry.key, id);
+      item.match = { status: 'matched', targetId: id, by: 'uniqueName' };
+      results.push({ kind: 'outcome', name: item.entry.name, status: 'created', targetId: id });
+    } else {
+      const reason = translateError(item.entry.name, result.error, plan.info, ctx.target.schema.ns, false);
+      item.cannotCreate = reason;
+      results.push({ kind: 'outcome', name: item.entry.name, status: 'failed', reason });
+    }
+  }
+  return results;
+}
+
 function usedKeys(plan: Plan): { templates: Set<string>; outcomes: Set<string> } {
   const templates = new Set<string>();
   const outcomes = new Set<string>();
@@ -269,6 +328,9 @@ function usedKeys(plan: Plan): { templates: Set<string>; outcomes: Set<string> }
       for (const r of n.templateReferences) templates.add(r.template);
     }
   }
+  // A template that the import creates can use an outcome definition too.
+  for (const key of templates)
+    for (const n of plan.templates.get(key)?.entry.tree ?? []) if (n.outcome) outcomes.add(n.outcome);
   return { templates, outcomes };
 }
 
@@ -299,6 +361,8 @@ export async function runImport(plan: Plan, opts: RunOptions): Promise<ImportRun
     plan.folderIds = new Map(ctx.folderIds);
   }
   const used = usedKeys(plan);
+  // Outcome definitions first: a template can use one too.
+  if (plan.answers.outcomes === 'create') library.push(...(await createOutcomes(ctx, used.outcomes)));
   if (plan.answers.templates === 'create') library.push(...(await createTemplates(ctx, used.templates)));
   // Recalculate with the created records: a failed template gives a warning, not a write (spec).
   if (library.some((l) => l.status === 'failed' || l.kind !== 'folder')) evaluatePlan(plan, plan.answers);

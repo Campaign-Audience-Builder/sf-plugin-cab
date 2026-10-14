@@ -35,12 +35,6 @@ const messages = Messages.loadMessages('@campaign-audience-builder/sf-plugin-cab
 /** Composite Graph allows 500 nodes in one graph. */
 export const MAX_GRAPH_NODES = 500;
 
-/**
- * Task 4.9 decides if the import can create outcome definitions through the REST API.
- * While this is false, `--missing-outcomes create` acts as `skip` and the plan says why.
- */
-export const OUTCOME_CREATE_SUPPORTED = false;
-
 export type Answers = {
   folders: MissingAnswer;
   templates: MissingAnswer;
@@ -290,6 +284,30 @@ function templateCreateProblem(target: CabOrg, entry: FileTemplate): string | un
   return undefined;
 }
 
+const SF_ID_IN_JSON = /"([a-zA-Z0-9]{18}|[a-zA-Z0-9]{15})"/g;
+
+/**
+ * Why an outcome definition cannot be created through the API, or undefined. Spike 4.9 showed that a
+ * definition, its version snapshot, and its condition tree made through REST work in CAB.
+ */
+export function outcomeCreateProblem(target: CabOrg, entry: FileOutcome): string | undefined {
+  const od = target.schema.objects.get('OutcomeDefinition__c');
+  const odv = target.schema.objects.get('OutcomeDefinitionVersion__c');
+  if (!od || !odv) return messages.getMessage('cannot.outcomeObject', [target.orgName]);
+  const afo = target.schema.objects.get('AudienceFilterObject__c');
+  if (!od.createable || !odv.createable || !afo?.fields.get('IsOutcomeTemplate__c')?.createable) {
+    return messages.getMessage('cannot.outcomePermission', [target.orgName]);
+  }
+  if (!entry.version) return messages.getMessage('cannot.outcomeNoVersion');
+  // The version snapshot must not point to records of the source org.
+  const config =
+    typeof entry.version.fields.RootConfigJson__c === 'string' ? entry.version.fields.RootConfigJson__c : '';
+  for (const m of config.matchAll(SF_ID_IN_JSON)) {
+    if (/\d/.test(m[1]) && target.keyPrefixes.has(m[1].slice(0, 3))) return messages.getMessage('cannot.outcomeIds');
+  }
+  return undefined;
+}
+
 async function planLibrary(
   target: CabOrg,
   file: ExportFile,
@@ -324,11 +342,7 @@ async function planLibrary(
   for (const o of file.outcomeDefinitions) {
     const match = matchLibrary(o, outcomeRecords, 'Name', Boolean(od?.fields.has('UniqueName__c')));
     if (match.status === 'matched') outcomeIdToKey.set(match.targetId, o.key);
-    const cannotCreate = !od
-      ? messages.getMessage('cannot.outcomeObject', [target.orgName])
-      : OUTCOME_CREATE_SUPPORTED
-      ? undefined
-      : messages.getMessage('cannot.outcomeApi', [target.orgName]);
+    const cannotCreate = outcomeCreateProblem(target, o);
     outcomes.set(o.key, {
       entry: o,
       match,

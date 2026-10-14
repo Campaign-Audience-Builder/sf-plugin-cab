@@ -44,7 +44,7 @@
 - [x] 5.1 Ask the folder, template, and outcome questions and the final confirmation, with flag equivalents, safe defaults, and the non-interactive stop
 - [x] 5.2 Write the backup file before the first write
 - [x] 5.3 Create missing folders in parent-first order
-- [ ] 5.4 Create missing templates and outcome definitions (one graph each) before the audiences that use them; on failure, clear the links or block the audiences as the spec says
+- [x] 5.4 Create missing templates and outcome definitions (one graph each) before the audiences that use them; on failure, clear the links or block the audiences as the spec says
 - [x] 5.5 Build one Composite Graph per audience (D8): audience, version, components, old tree deletes, new tree inserts, and `LastConfigurationChange__c` set to now
 - [x] 5.6 Implement the non-atomic path for large audiences (insert new records, then delete old records)
 - [x] 5.7 Run the graphs one at a time, with one retry on `UNABLE_TO_LOCK_ROW`, `--fail-fast`, and dependent skips after a failure

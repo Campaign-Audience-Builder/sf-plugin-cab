@@ -52,7 +52,11 @@ export type FileFolder = { uniqueName: string; label: string; parent: string | n
 
 export type FileTemplate = { key: string; name: string; tree: FileNode[] };
 
-export type FileOutcome = FileRecord & { key: string; name: string; tree: FileNode[] };
+/**
+ * An outcome definition: its configuration only. The file holds the definition fields, the snapshot of
+ * its latest version, and its condition tree. It never holds cohorts, holdouts, assignments, or measurements.
+ */
+export type FileOutcome = FileRecord & { key: string; name: string; tree: FileNode[]; version: FileRecord | null };
 
 export type ExportFile = {
   format: string;

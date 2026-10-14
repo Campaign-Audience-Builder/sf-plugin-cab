@@ -90,6 +90,14 @@ The template has aggregate filters. Campaign Audience Builder lets only its own 
 
 %s has a CAB version without outcome definitions.
 
-# cannot.outcomeApi
+# cannot.outcomePermission
 
-The import cannot create outcome definitions. Create the outcome definition in %s first, then run the import again.
+You cannot create outcome definitions in %s. Assign the permission set "OutcomeManagement" first.
+
+# cannot.outcomeNoVersion
+
+The file has no version of the outcome definition. Export the audiences again with this plugin version.
+
+# cannot.outcomeIds
+
+The outcome definition refers to records of the source org. Create it in the target org first, then run the import again.

@@ -7,7 +7,7 @@ import { translateError } from '../../src/cab/importer.js';
 import type { FileAudience } from '../../src/cab/model.js';
 import { hashAudience } from '../../src/cab/normalize.js';
 import type { CabOrg } from '../../src/cab/org.js';
-import { AudiencePlan, countGraphNodes, orderAudiences } from '../../src/cab/plan.js';
+import { AudiencePlan, countGraphNodes, orderAudiences, outcomeCreateProblem } from '../../src/cab/plan.js';
 import { definitionFields } from '../../src/cab/schema.js';
 import { sampleTree, schema } from './convert.test.js';
 
@@ -201,5 +201,42 @@ describe('messages and exit codes', () => {
     expect(exitCodeOf({ ...c, created: 509, unchanged: 3 })).to.equal(0);
     expect(exitCodeOf({ ...c, created: 509, failed: 3 })).to.equal(68);
     expect(exitCodeOf({ ...c, blocked: 2, unchanged: 1 })).to.equal(1);
+  });
+});
+
+describe('outcome definition creation (5.4)', () => {
+  const outcomeTarget = (createable: boolean): CabOrg =>
+    ({
+      orgName: 'Acme',
+      keyPrefixes: new Map([['005', 'User']]),
+      schema: {
+        ns: '',
+        objects: new Map<string, unknown>([
+          ['OutcomeDefinition__c', { createable }],
+          ['OutcomeDefinitionVersion__c', { createable }],
+          ['AudienceFilterObject__c', { fields: new Map([['IsOutcomeTemplate__c', { createable }]]) }],
+        ]),
+      },
+    } as unknown as CabOrg);
+  const entry = (config: string) => ({
+    key: 'K',
+    name: 'K',
+    fields: {},
+    tree: [],
+    version: { fields: { RootConfigJson__c: config } },
+  });
+
+  it('can create a definition whose version snapshot has no record Ids', () => {
+    expect(outcomeCreateProblem(outcomeTarget(true), entry('{"nodeId":null,"value":"Completed"}'))).to.equal(undefined);
+  });
+
+  it('refuses a snapshot with a record Id of the source org', () => {
+    expect(outcomeCreateProblem(outcomeTarget(true), entry('{"value":"005Fg00000xzpd7IAA"}'))).to.include(
+      'refers to records'
+    );
+  });
+
+  it('names the permission set when the user cannot create outcome definitions', () => {
+    expect(outcomeCreateProblem(outcomeTarget(false), entry('{}'))).to.include('OutcomeManagement');
   });
 });

@@ -81,6 +81,27 @@ export function findIdLikeValues(
   return out;
 }
 
+/** The latest version of each outcome definition: the snapshot that the import needs to create it. */
+async function loadLatestOutcomeVersions(cab: CabOrg, outcomeIds: string[]): Promise<Map<string, Raw>> {
+  const info = cab.schema.objects.get('OutcomeDefinitionVersion__c');
+  if (!info || !outcomeIds.length) return new Map();
+  const versions = await queryIn(
+    cab,
+    'OutcomeDefinitionVersion__c',
+    selectFields(info),
+    'OutcomeDefinition__c',
+    outcomeIds
+  );
+  const latest = new Map<string, Raw>();
+  for (const v of versions) {
+    const id = str(v.OutcomeDefinition__c);
+    if (!id) continue;
+    const current = latest.get(id);
+    if (!current || Number(v.VersionNumber__c ?? 0) > Number(current.VersionNumber__c ?? 0)) latest.set(id, v);
+  }
+  return latest;
+}
+
 function templateKeyOf(raw: Raw): { key: string; name: string } {
   const name = str(raw.Label__c) ?? raw.Id;
   return { key: str(raw.UniqueName__c) ?? name, name };
@@ -185,14 +206,20 @@ export async function buildExport(
     name: templateKeys.get(root.Id)!.name,
     tree: convertTree(cab.schema, libraryTrees.get(root.Id)!, keys),
   }));
+  const latestVersions = await loadLatestOutcomeVersions(
+    cab,
+    outcomes.map((o) => o.Id)
+  );
   const outcomeDefinitions: FileOutcome[] = outcomes.map((o) => {
     const root = str(o.OutcomeTemplateRoot__c);
     const tree = root ? libraryTrees.get(root) : undefined;
+    const version = latestVersions.get(o.Id);
     return {
       key: outcomeKeys.get(o.Id)!.key,
       name: outcomeKeys.get(o.Id)!.name,
       ...toFileRecord(cab.schema, 'OutcomeDefinition__c', o),
       tree: tree ? convertTree(cab.schema, tree, keys) : [],
+      version: version ? toFileRecord(cab.schema, 'OutcomeDefinitionVersion__c', version) : null,
     };
   });
 
