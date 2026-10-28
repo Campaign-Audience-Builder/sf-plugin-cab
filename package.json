@@ -1,7 +1,7 @@
 {
   "name": "@campaign-audience-builder/sf-plugin-cab",
   "description": "sf CLI plugin for admins to move Campaign Audience Builder audiences between Salesforce orgs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Campaign Audience Builder",
   "license": "Apache-2.0",
   "bugs": "https://github.com/Campaign-Audience-Builder/sf-plugin-cab/issues",

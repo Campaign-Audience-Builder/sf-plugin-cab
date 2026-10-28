@@ -9,7 +9,10 @@ export type TreeProblem =
 
 const PLAIN_FIELD = /^[A-Za-z][A-Za-z0-9_]*$/;
 
-/** The objects and plain field names that a tree uses. Field paths with a dot are not checked. */
+/**
+ * The objects and plain field names that a tree uses. Field paths with a dot are not checked.
+ * The lookup field of a parent filter is on the object of its parent node, as CAB reads it (QueryEngine).
+ */
 export function usedFields(nodes: FileNode[]): Map<string, Set<string>> {
   const out = new Map<string, Set<string>>();
   const add = (object: unknown, field: unknown): void => {
@@ -18,9 +21,13 @@ export function usedFields(nodes: FileNode[]): Map<string, Set<string>> {
     if (typeof field === 'string' && PLAIN_FIELD.test(field)) set.add(field);
     out.set(object, set);
   };
+  const byRef = new Map(nodes.map((n) => [n.ref, n]));
   for (const n of nodes) {
     const object = n.fields.SObjectName__c;
-    add(object, n.fields.LookupFieldName__c);
+    const lookupObject =
+      n.fields.IsParentFilter__c === true ? byRef.get(n.parent ?? '')?.fields.SObjectName__c : object;
+    add(object, undefined);
+    add(lookupObject, n.fields.LookupFieldName__c);
     for (const f of n.filters) add(object, f.fields.FilterFieldAPIName__c);
     for (const d of n.dataInclusions) {
       add(object, d.fields.FieldAPIName__c);
